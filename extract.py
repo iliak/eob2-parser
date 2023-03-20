@@ -4,8 +4,8 @@ import json
 import os
 
 from commons import ItemFlags
-from formats.dcr import dcr_decode
-from formats.dec import dec_decode
+from formats.dcr import dcr_decode, dcr_draw
+from formats.dec import dec_decode, dec_draw
 from formats.inf import inf_decode
 from formats.item import item_decode
 from formats.itemtypes import itemtypes_decode
@@ -13,7 +13,8 @@ from formats.maz import maz_decode
 from formats.pal import pal_decode
 from formats.text import text_decode
 from formats.vcn import vcn_decode
-from formats.vmp import vmp_decode
+from formats.vmp import vmp_decode, vmp_draw
+from savegame import Savegame
 
 assets = {
     "items":       [],
@@ -93,15 +94,15 @@ if __name__ == '__main__':
     # INF: Maps
     assets['inf'] = inf_decode()
 
-    dump()
-    exit()
 
     # Savegame
-    savegame = Savegame('data/EOBDATA2.SAV')
+    # savegame = Savegame('data/EOBDATA2.SAV')
 
     dcr_draw(assets)
     vmp_draw(assets)
     dec_draw(assets)
+    dump()
+    exit()
 
     decorations_dump(assets["dec"])
 

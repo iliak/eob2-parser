@@ -1,3 +1,5 @@
+import os
+
 from PIL import Image
 
 from tools.reader import BinaryReader
@@ -32,14 +34,18 @@ def dcr_decode():
 
 def dcr_draw(assets):
     files = ['BEHOLDER', 'CLERIC1', 'CLERIC2', 'CLERIC3', 'DRAGON', 'GUARD1', 'GUARD2', 'MAGE', 'MANTIS']
-    path = './data/'
+    input_path = './data/'
+    output_path = './build/dcr/'
+
+    if not os.path.exists(output_path):
+        os.makedirs(output_path)
 
     for file in files:
         dcr = assets['dcr'][file + '.DCR']
 
         for id in range(len(dcr)):
             data = dcr[id]
-            img = Image.open("{path}{file}.PNG".format(path=path, file=file), 'r')
+            img = Image.open("{path}{file}.PNG".format(path=input_path, file=file), 'r')
             # img.convert('RGBA')
 
             for face in range(6):
@@ -61,6 +67,6 @@ def dcr_draw(assets):
                 bg.paste(crop, (x, y), )
 
                 bg = bg.resize((640, 400))
-                bg.save("{path}{file}_{id}_{face}.PNG".format(path=path, file=file, id=id, face=face), format='png')
+                bg.save("{path}{file}_{id}_{face}.PNG".format(path=output_path, file=file, id=id, face=face), format='png')
 
             i = 1
