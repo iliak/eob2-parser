@@ -1,4 +1,3 @@
-
 class IsPartyVisible:
     """
 
@@ -9,21 +8,15 @@ class IsPartyVisible:
 
         :param reader:
         """
+        pass
 
-        self.location = None
-
-        self.decode(reader)
-
-    def decode(self, reader):
+    def read(self, reader):
         """
 
         :param reader:
         :return:
         """
+        pass
 
-        if not reader:
-            return
-
-    def run(self, maze, assets):
-
+    def decode(self, tokens, maze, assets):
         return "is party visible"

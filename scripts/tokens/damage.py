@@ -21,9 +21,9 @@ class Damage:
         self.vs_small = None
         self.vs_big = None
 
-        self.decode(reader)
+        self.read(reader)
 
-    def decode(self, reader):
+    def read(self, reader):
         """
 
         :param reader:
@@ -40,7 +40,7 @@ class Damage:
         self.savingThrowType = reader.read_ubyte()
         self.savingThrowEffect = reader.read_ubyte()
 
-    def run(self, maze, assets):
+    def decode(self, maze, assets):
         target = 'team ' if self.target == 0xFF else ''
-        return f"Damage {self.target}{self.times} time(s) with item {self.itemOrPips}, modifier: {self.mod}, flags: 0x{self.flags:02X}, " \
+        return f"Damage {target}{self.times} time(s) with item {self.itemOrPips}, modifier: {self.mod}, flags: 0x{self.flags:02X}, " \
                f"savingThrowType: {self.savingThrowEffect}, savingThrowEffect: {self.savingThrowEffect}"

@@ -23,9 +23,9 @@ class NewItem:
         self.item_flag = None
         self.item_icon = None
 
-        self.decode(reader)
+        self.read(reader)
 
-    def decode(self, reader):
+    def read(self, reader):
         """
 
         :param reader:
@@ -39,7 +39,6 @@ class NewItem:
         self.subpos = reader.read_ubyte()
         self.flags = reader.read_ubyte()
 
-        i = 1
         if self.flags & 1 == 1:
             self.item_value = reader.read_ubyte()
         if self.flags & 2 == 2:
@@ -47,7 +46,7 @@ class NewItem:
         if self.flags & 4 == 4:
             self.item_icon = reader.read_ubyte()
 
-    def run(self, maze, assets):
+    def decode(self, maze, assets):
 
         if self.location.value == 0xFF: #-1:
             return "New hand item id: {item_id} (value {value}, flags: {flags} 0x{flags:02x}, icon: {icon}]".format(

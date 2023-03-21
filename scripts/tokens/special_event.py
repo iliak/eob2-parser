@@ -13,9 +13,9 @@ class SpecialEvent:
         """
         self.id = None
 
-        self.decode(reader)
+        self.read(reader)
 
-    def decode(self, reader):
+    def read(self, reader):
         """
 
         :param reader:
@@ -26,7 +26,7 @@ class SpecialEvent:
 
         self.id = reader.read_ushort()
 
-    def run(self, maze, assets):
+    def decode(self, maze, assets):
 
         if self.id == 0:
             return "Special event: lightning"

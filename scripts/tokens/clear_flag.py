@@ -15,9 +15,9 @@ class ClearFlag:
         self.flag = None
         self.monster_id = None
 
-        self.decode(reader)
+        self.read(reader)
 
-    def decode(self, reader):
+    def read(self, reader):
         """
 
         :param reader:
@@ -36,7 +36,7 @@ class ClearFlag:
         elif self.type == -47:  # Party ??
             pass
 
-    def run(self, maze, assets):
+    def decode(self, maze, assets):
 
         if self.type == -17:
             return f"Clear level flag {self.flag}"

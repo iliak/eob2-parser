@@ -57,8 +57,6 @@ class Script:
 
         while reader.offset < start + length:
 
-            # if debug:
-            #     print("[0x{:04X}]: ".format(reader.offset - start), end='')
             offset = reader.offset - start
             opcode = reader.read_ubyte()
             type = self.opcodes.get(opcode)
@@ -69,4 +67,4 @@ class Script:
                 print("###########[ERROR] unknown opcode: 0x{opcode:02X}".format(opcode=opcode))
 
     def run(self, maze, assets):
-        return {f"0x{token:04X}": self.tokens[token].run(maze, assets) for token in self.tokens}
+        return {f"0x{token:04X}": self.tokens[token].decode(maze, assets) for token in self.tokens}

@@ -10,9 +10,9 @@ class ImmediateShort:
         """
         self.value = None
 
-        self.decode(reader)
+        self.read(reader)
 
-    def decode(self, reader):
+    def read(self, reader):
         """
 
         :param reader:
@@ -24,6 +24,6 @@ class ImmediateShort:
 
         self.value = reader.read_ushort()
 
-    def run(self, maze, assets):
-        return f"{self.value}"
+    def decode(self, tokens, maze, assets):
+        return f"0x{self.value:04X}"
 

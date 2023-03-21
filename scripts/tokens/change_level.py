@@ -23,9 +23,9 @@ class ChangeLevel:
         self.direction = None
         self.monster = None
 
-        self.decode(reader)
+        self.read(reader)
 
-    def decode(self, reader):
+    def read(self, reader):
         """
 
         :param reader:
@@ -46,7 +46,7 @@ class ChangeLevel:
             self.level = reader.read_byte()
             self.monster = reader.read_byte(13)
 
-    def run(self, maze, assets):
+    def decode(self, maze, assets):
 
         if self.cmd == -27:
             return "Entering to level {level}, sub level {sub} at {location} facing to {direction}".format(

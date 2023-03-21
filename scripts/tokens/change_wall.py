@@ -20,9 +20,9 @@ class ChangeWall:
         self.side = None
         self.model = None
 
-        self.decode(reader)
+        self.read(reader)
 
-    def decode(self, reader):
+    def read(self, reader):
         """
 
         :param reader:
@@ -46,7 +46,7 @@ class ChangeWall:
         elif self.type == -22:     # Door
             pass
 
-    def run(self, maze, assets):
+    def decode(self, maze, assets):
 
         if self.type == -9:
             return "Change wall at {location} all sides from: {model} to: {to}".format(

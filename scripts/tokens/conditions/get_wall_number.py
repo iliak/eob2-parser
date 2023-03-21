@@ -14,9 +14,9 @@ class GetWallNumber:
 
         self.location = None
 
-        self.decode(reader)
+        self.read(reader)
 
-    def decode(self, reader):
+    def read(self, reader):
         """
 
         :param reader:
@@ -28,6 +28,6 @@ class GetWallNumber:
 
         self.location = Location(reader)
 
-    def run(self, maze, assets):
+    def decode(self, tokens, maze, assets):
 
-        return "wall index at {location}".format(location=self.location)
+        return f"wall index at {self.location}"

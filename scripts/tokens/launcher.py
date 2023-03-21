@@ -21,9 +21,9 @@ class Launcher:
         self.direction = None
         self.sub_position = None
 
-        self.decode(reader)
+        self.read(reader)
 
-    def decode(self, reader):
+    def read(self, reader):
         """
 
         :param reader:
@@ -38,7 +38,7 @@ class Launcher:
         self.direction = reader.read_ubyte()
         self.sub_position = reader.read_ubyte()
 
-    def run(self, maze, assets):
+    def decode(self, maze, assets):
 
         if self.type == 0xDF:  # -33:
             return f"Launching spell #{self.item_id} from {self.location} facing {directions[self.direction]} at subpos {self.sub_position}"

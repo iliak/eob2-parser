@@ -13,9 +13,9 @@ class RollDice:
         """
         self.dice = None
 
-        self.decode(reader)
+        self.read(reader)
 
-    def decode(self, reader):
+    def read(self, reader):
         """
 
         :param reader:
@@ -27,7 +27,7 @@ class RollDice:
 
         self.dice = Dice(reader)
 
-    def run(self, maze, assets):
+    def decode(self, tokens, maze, assets):
 
         return "dice {dice}".format(dice=self.dice)
 

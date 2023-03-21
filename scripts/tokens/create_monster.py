@@ -22,9 +22,9 @@ class CreateMonster:
         self.weapon = None
         self.pocket = None
 
-        self.decode(reader)
+        self.read(reader)
 
-    def decode(self, reader):
+    def read(self, reader):
 
         if not reader:
             return
@@ -41,7 +41,7 @@ class CreateMonster:
         self.pocket = reader.read_ushort()
         self.weapon = reader.read_ushort()
 
-    def run(self, maze, assets):
+    def decode(self, maze, assets):
         return "Create monster #{unit}, timer: {timer}, location: {location}, subpos: {pos}, dir: {dir}, " \
                "frame: {frame}, phase: {phase}, pause: {pause}, pocket: {pocket}, weapon: {weapon}".format(
             unit=self.unit, timer=self.timer, location=self.location, pos=self.pos, dir=directions[self.dir],

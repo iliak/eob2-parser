@@ -13,20 +13,17 @@ class IsMonsterAtLocation:
         """
 
         self.location = None
+        self.read(reader)
 
-        self.decode(reader)
-
-    def decode(self, reader):
+    def read(self, reader):
         """
 
         :param reader:
         :return:
         """
 
-        if not reader:
-            return
+        # TODO: Location is wrong...
         self.location = Location(reader)
 
-    def run(self, maze, assets):
-
-        return "monster count at {location}".format(location=self.location)
+    def decode(self, tokens, maze, assets):
+        return f"monster at {self.location}"

@@ -1,7 +1,8 @@
 
-class GetGlobalFlag:
-    """
 
+class OnBash:
+    """
+    on thrown item ?
     """
 
     def __init__(self, reader):
@@ -9,9 +10,7 @@ class GetGlobalFlag:
 
         :param reader:
         """
-
-        self.flag = None
-
+        self.value = None
         self.read(reader)
 
     def read(self, reader):
@@ -20,12 +19,7 @@ class GetGlobalFlag:
         :param reader:
         :return:
         """
-
-        if not reader:
-            return
-
-        self.flag = reader.read_ubyte()
+        self.value = reader.read_ubyte()
 
     def decode(self, tokens, maze, assets):
-
-        return "get global flag {flag}".format(flag=self.flag)
+        return f"on bash(0x{self.value:02X})"

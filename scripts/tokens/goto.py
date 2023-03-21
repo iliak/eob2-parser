@@ -6,13 +6,13 @@ class Goto:
 
     def __init__(self, reader):
         self.offset = None
-        self.decode(reader)
+        self.read(reader)
 
-    def decode(self, reader):
+    def read(self, reader):
         if not reader:
             return
 
         self.offset = reader.read_ushort()
 
-    def run(self, maze, assets):
+    def decode(self, maze, assets):
         return f"Goto 0x{self.offset:04X}"

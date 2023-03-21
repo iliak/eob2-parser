@@ -1,5 +1,4 @@
-
-class GetGlobalFlag:
+class OnSpell:
     """
 
     """
@@ -9,10 +8,7 @@ class GetGlobalFlag:
 
         :param reader:
         """
-
-        self.flag = None
-
-        self.read(reader)
+        pass
 
     def read(self, reader):
         """
@@ -20,12 +16,7 @@ class GetGlobalFlag:
         :param reader:
         :return:
         """
-
-        if not reader:
-            return
-
-        self.flag = reader.read_ubyte()
+        pass
 
     def decode(self, tokens, maze, assets):
-
-        return "get global flag {flag}".format(flag=self.flag)
+        return "on spell"

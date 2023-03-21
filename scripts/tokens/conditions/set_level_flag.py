@@ -12,9 +12,9 @@ class SetLevelFlag:
 
         self.flag = None
 
-        self.decode(reader)
+        self.read(reader)
 
-    def decode(self, reader):
+    def read(self, reader):
         """
 
         :param reader:
@@ -26,7 +26,7 @@ class SetLevelFlag:
 
         self.flag = reader.read_ubyte()
 
-    def run(self, maze, assets):
+    def decode(self, tokens, maze, assets):
 
         return "set level flag {flag}".format(flag=self.flag)
 

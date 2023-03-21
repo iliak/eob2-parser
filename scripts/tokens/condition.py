@@ -20,17 +20,17 @@ class Condition:
         0xF1: IsPartyAtLocation,
         0xF0: GetGlobalFlag,
         0xEF: GetLevelFlag,
-        0xEE: Else,  # ELSE GOTO
+        0xEE: Else,
         0xED: GetPartyDirection,
         0xE9: GetWallSide,
         0xE7: GetPointerItem,
         0xE0: GetTriggerFlag,
-        0xDF: ConditionDF,
+        0xDF: OnSpell,
         0xDD: HasRace,
         0xDC: HasClass,
         0xDB: RollDice,
         0xDA: IsPartyVisible,
-        0xD7: ConditionD7,
+        0xD7: OnBash,
         0xD2: ImmediateShort,
         0xCE: HasAlignment,
         0x01: PushTrue,
@@ -45,9 +45,9 @@ class Condition:
         self.tokens = []
         self.goto = None
 
-        self.decode(reader)
+        self.read(reader)
 
-    def decode(self, reader):
+    def read(self, reader):
         """
 
         :param reader:
@@ -73,10 +73,15 @@ class Condition:
 
         self.goto = reader.read_ushort()
 
-    def run(self, maze, assets):
+    def decode(self, maze, assets):
 
-        str = "If "
-        for token in self.tokens:
-            str += token.run(maze, assets) + ' | '
+        tokens = list(self.tokens)
+        token = tokens.pop()
 
-        return str + ' else goto 0x{target:04X}'.format(target=self.goto)
+        try:
+            decoded = token.decode(tokens, maze, assets)
+            msg = f"If {decoded} else goto 0x{self.goto:04X}"
+        except IndexError as e:
+            msg = f"[ERROR]###################### {e}"
+
+        return msg

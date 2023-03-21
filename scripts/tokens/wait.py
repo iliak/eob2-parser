@@ -14,9 +14,9 @@ class Wait:
         """
         self.delay = None
 
-        self.decode(reader)
+        self.read(reader)
 
-    def decode(self, reader):
+    def read(self, reader):
         """
 
         :param reader:
@@ -27,7 +27,7 @@ class Wait:
 
         self.delay = reader.read_ushort()
 
-    def run(self, maze, assets):
+    def decode(self, maze, assets):
 
         return f"Wait {self.delay} ticks ({self.delay * 55} ms)"
 

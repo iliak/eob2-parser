@@ -15,9 +15,9 @@ class Location:
         self.value = None
         self.h = None
         self.l = None
-        self.decode(reader)
+        self.read(reader)
 
-    def decode(self, reader):
+    def read(self, reader):
 
         if not reader:
             return

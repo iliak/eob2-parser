@@ -15,9 +15,9 @@ class IdentifyAllItems:
         """
         self.location = None
 
-        self.decode(reader)
+        self.read(reader)
 
-    def decode(self, reader):
+    def read(self, reader):
         """
 
         :param reader:
@@ -28,6 +28,6 @@ class IdentifyAllItems:
 
         self.location = Location(reader)
 
-    def run(self, maze, assets):
+    def decode(self, maze, assets):
 
         return f"Identify all items at {self.location}"

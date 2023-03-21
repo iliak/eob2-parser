@@ -17,9 +17,9 @@ class Sound:
         self.id = None
         self.location = None
 
-        self.decode(reader)
+        self.read(reader)
 
-    def decode(self, reader):
+    def read(self, reader):
         """
 
         :param reader:
@@ -31,7 +31,7 @@ class Sound:
         self.id = reader.read_ubyte()
         self.location = Location(reader)
 
-    def run(self, maze, assets):
+    def decode(self, maze, assets):
 
         if self.location.x or self.location.y:
             return f"Environmental sound {self.id} at {self.location}"

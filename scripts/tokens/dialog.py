@@ -17,9 +17,9 @@ class Dialog:
         self.text_id = None
         self.buttons = [None for i in range(6)]
 
-        self.decode(reader)
+        self.read(reader)
 
-    def decode(self, reader):
+    def read(self, reader):
 
         if not reader:
             return
@@ -57,10 +57,10 @@ class Dialog:
             self.x = reader.read_ushort()
             self.y = reader.read_ushort()
 
-    def run(self, maze, assets):
+    def decode(self, maze, assets):
 
         if self.type == -45:    # Display a picture from a cps file
-            return "Draw sequence : \"{picture}\", rect: {rect}, X: {x}, Y: {y}, flags: 0x{flags:04X}".format(
+            return "Draw sequence : '{picture}', rect: {rect}, X: {x}, Y: {y}, flags: 0x{flags:04X}".format(
                 x=int(self.x / 8), y=self.y, picture=self.picture_name, flags=self.flags, rect=self.rect)
 
         elif self.type == -44:  # Close dialog

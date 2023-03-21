@@ -13,9 +13,9 @@ class GoSub:
 
         self.offset = None
 
-        self.decode(reader)
+        self.read(reader)
 
-    def decode(self, reader):
+    def read(self, reader):
         """
 
         :param reader:
@@ -26,5 +26,5 @@ class GoSub:
 
         self.offset = reader.read_ushort()
 
-    def run(self, maze, assets):
-        return f"GOSUB 0x{self.offset:04X}"
+    def decode(self, maze, assets):
+        return f"GoSub 0x{self.offset:04X}"

@@ -8,18 +8,15 @@ class GetPartyDirection:
 
         :param reader:
         """
+        pass
 
-        self.decode(reader)
-
-    def decode(self, reader):
+    def read(self, reader):
         """
 
         :param reader:
         :return:
         """
+        pass
 
-        if not reader:
-            return
-
-    def run(self, maze, assets):
+    def decode(self, tokens, maze, assets):
         return "party direction"

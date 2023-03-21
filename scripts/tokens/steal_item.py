@@ -17,9 +17,9 @@ class StealItem:
         self.location = None
         self.sub_position = None
 
-        self.decode(reader)
+        self.read(reader)
 
-    def decode(self, reader):
+    def read(self, reader):
         """
 
         :param reader:
@@ -32,7 +32,7 @@ class StealItem:
         self.location = Location(reader)
         self.sub_position = reader.read_ubyte()
 
-    def run(self, maze, assets):
+    def decode(self, maze, assets):
 
         if self.whom == 0xFF: #-1:
             return f"Steal item and drop it at {self.location}:{self.sub_position}"

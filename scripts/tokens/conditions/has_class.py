@@ -13,9 +13,9 @@ class HasClass:
         """
         self.id = None
 
-        self.decode(reader)
+        self.read(reader)
 
-    def decode(self, reader):
+    def read(self, reader):
         """
 
         :param reader:
@@ -27,7 +27,7 @@ class HasClass:
 
         self.id = reader.read_ubyte()
 
-    def run(self, maze, assets):
+    def decode(self, tokens, maze, assets):
 
         return f"has class \"{classes[self.id]}\""
 

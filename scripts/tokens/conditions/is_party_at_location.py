@@ -17,9 +17,9 @@ class IsPartyAtLocation:
         self.flags = None
         self.location = None
 
-        self.decode(reader)
+        self.read(reader)
 
-    def decode(self, reader):
+    def read(self, reader):
         """
 
         :param reader:
@@ -37,11 +37,11 @@ class IsPartyAtLocation:
         else:   # Party position
             self.location = Location(reader)
 
-    def run(self, maze, assets):
+    def decode(self, tokens, maze, assets):
 
         if self.code == 0xF5:
-            return "party inventory count of 0x{type:04X} flags: 0x{flags:02X}".format(
+            return "team inventory count of 0x{type:04X} flags: 0x{flags:02X}".format(
                 type=self.type, flags=self.flags
                 )
         else:
-            return "party is at location {location}".format(location=self.location)
+            return "team at {location}".format(location=self.location)

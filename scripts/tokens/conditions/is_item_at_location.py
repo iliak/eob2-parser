@@ -15,9 +15,9 @@ class IsItemAtLocation:
         self.type = None
         self.location = None
 
-        self.decode(reader)
+        self.read(reader)
 
-    def decode(self, reader):
+    def read(self, reader):
         """
 
         :param reader:
@@ -30,9 +30,9 @@ class IsItemAtLocation:
         self.type = reader.read_ushort()
         self.location = Location(reader)
 
-    def run(self, maze, assets):
+    def decode(self, tokens, maze, assets):
 
         if self.type == 0xFF00:
-            return f"maze count items at {self.location}"
+            return f"item at {self.location}"
         else:
-            return f"maze count items of type 0x{self.type:04X} at {self.location}"
+            return f"item of type 0x{self.type:04X} at {self.location}"

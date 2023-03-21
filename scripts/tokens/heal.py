@@ -14,9 +14,9 @@ class Heal:
         self.target = None
         self.points = 0
 
-        self.decode(reader)
+        self.read(reader)
 
-    def decode(self, reader):
+    def read(self, reader):
         """
 
         :param reader:
@@ -28,7 +28,7 @@ class Heal:
         self.target = reader.read_ubyte()
         self.points = reader.read_ubyte()
 
-    def run(self, maze, assets):
+    def decode(self, maze, assets):
 
         if self.target:
             return f"Heal champion #{self.target} of {self.points} points"

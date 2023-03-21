@@ -21,9 +21,9 @@ class SetWall:
         self.side = None
         self.direction = None
 
-        self.decode(reader)
+        self.read(reader)
 
-    def decode(self, reader):
+    def read(self, reader):
         """
 
         :param reader:
@@ -46,7 +46,7 @@ class SetWall:
         elif self.type == -19:     # change party direction
             self.direction = reader.read_ubyte()
 
-    def run(self, maze, assets):
+    def decode(self, maze, assets):
 
         if self.type == -9:
             return "Set walls at {location} all sides to {to:02}".format(location=self.location, to=self.to)

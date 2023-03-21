@@ -7,12 +7,11 @@ class Return:
 
     def __init__(self, reader):
 
-        self.decode(reader)
+        pass
 
-    def decode(self, reader):
+    def read(self, reader):
 
-        if not reader:
-            return
+        pass
 
-    def run(self, maze, assets):
+    def decode(self, maze, assets):
         return "Return"

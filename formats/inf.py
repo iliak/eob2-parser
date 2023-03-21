@@ -228,12 +228,19 @@ class TriggerFlag(Enum):
     """
     Flags used to trigger events
     """
+    OnClick = 0x00
     OnPartyEnter = 0x08
     OnPartyLeave = 0x10
     OnPutItem = 0x20
     OnGetItem = 0x40
     OnthrowItem = 0x80
-    OnClick = 0x800
+    On100 = 0x100
+    on200 = 0x200
+    on400 = 0x400
+    OnBash = 0x800
+    OnMonsterEnter = 0x1000
+    OnMonsterLeave = 0x2000
+    OnSpell = 0x4000
 
 
 class Trigger:
@@ -246,8 +253,8 @@ class Trigger:
         :param reader:
         """
         self.location = None
-        self.flags = None
-        self.offset = None
+        self.mask = None
+        self.script = None
 
         self.decode(reader)
 
@@ -261,18 +268,18 @@ class Trigger:
             return
 
         self.location = Location(reader)
-        self.flags = reader.read_ushort()
-        self.offset = reader.read_ushort()
+        self.mask = reader.read_ushort()
+        self.script = reader.read_ushort()
 
     def run(self, maze, assets):
         """
 
         :return:
         """
-        return {"offset": f"0x{self.offset:04X}", "flags": f"0x{self.flags:02X}"}
+        return {"script": f"0x{self.script:04X}", "mask": f"0x{self.mask:04X}"}
 
     def __str__(self):
-        return "{location}: offset: 0x{offset:04X}, flags: 0x{flags:04X}".format(location=self.location, offset=self.offset, flags=self.flags)
+        return f"{self.location}: script: 0x{self.script:04X}, mask: 0x{self.mask:04X}"
 
 
 class Header:

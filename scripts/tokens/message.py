@@ -14,9 +14,9 @@ class Message:
         self.message_id = None
         self.color = None
 
-        self.decode(reader)
+        self.read(reader)
 
-    def decode(self, reader):
+    def read(self, reader):
         """
 
         :param reader:
@@ -28,5 +28,5 @@ class Message:
         self.message_id = reader.read_ushort()
         self.color = reader.read_ushort()
 
-    def run(self, maze, assets):
+    def decode(self, maze, assets):
         return f"Message '{maze.messages[self.message_id]}' color: {self.color}"

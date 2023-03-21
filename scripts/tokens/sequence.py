@@ -14,9 +14,9 @@ class Sequence:
         """
         self.cmd = None
 
-        self.decode(reader)
+        self.read(reader)
 
-    def decode(self, reader):
+    def read(self, reader):
         """
 
         :param reader:
@@ -27,7 +27,7 @@ class Sequence:
 
         self.cmd = reader.read_ubyte()
 
-    def run(self, maze, assets):
+    def decode(self, maze, assets):
 
         """
         nightmare

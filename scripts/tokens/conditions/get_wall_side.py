@@ -16,9 +16,9 @@ class GetWallSide:
         self.side = None
         self.location = None
 
-        self.decode(reader)
+        self.read(reader)
 
-    def decode(self, reader):
+    def read(self, reader):
         """
 
         :param reader:
@@ -31,7 +31,7 @@ class GetWallSide:
         self.side = reader.read_ubyte()
         self.location = Location(reader)
 
-    def run(self, maze, assets):
+    def decode(self, tokens, maze, assets):
 
-        return "wall side {side} at {location}".format(side=directions[self.side], location=self.location)
+        return f"{directions[self.side]} wall side at {self.location}"
 

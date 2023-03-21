@@ -8,7 +8,8 @@ class PushFalse:
 
         :param reader:
         """
+        pass
 
-    def run(self, maze, assets):
-        return "push False"
+    def decode(self, tokens, maze, assets):
+        return "False"
 

@@ -27,9 +27,9 @@ class Teleport:
         # self.tmp2 = -1
         # self.payload = []
 
-        self.decode(reader)
+        self.read(reader)
 
-    def decode(self, reader):
+    def read(self, reader):
         """
         BOGUS extra data not handled
         :param reader:
@@ -63,7 +63,7 @@ class Teleport:
         elif self.type == 0xE8:  # -24:  # Move party
             self.destination = Location(reader)
 
-    def run(self, maze, assets):
+    def decode(self, maze, assets):
 
         if self.type == 0xE8:  # -24:
             return "Teleport team to {dest}".format(dest=self.destination)
@@ -72,12 +72,12 @@ class Teleport:
             return "Teleport monsters from {src} to {dest}".format(src=self.source, dest=self.destination)
 
         elif self.type == 0xF5:  # -11:
-            if self.sub == 0xe5:
+            if self.sub == 0xE5:
                 return f"Teleport (0xF5) items from level {self.src_level}@{self.source} to level {self.dst_level}@{self.dst_blk}"
-            elif self.sub == 0xeb:
+            elif self.sub == 0xEB:
                 return f"Teleport (0xF5) items in current level from {self.source} to {self.dst_blk}"
             else:
-                return f"Teleport (0xF5) ERROR ### #{self.type:02X} sub {self.sub} payload: {{x for x in self.payload}}"
+                return f"Teleport (0xF5) ERROR ### #0x{self.type:02X} sub 0x{self.sub:02X} payload: {[f'0x{x:02X}' for x in self.payload]}"
 
         elif self.type == 0xE1:  # -31:
             return "Teleport item of type {item_type} from {source} to {dest}".format(

@@ -16,9 +16,9 @@ class CloseDoor:
 
         self.location = None
 
-        self.decode(reader)
+        self.read(reader)
 
-    def decode(self, reader):
+    def read(self, reader):
         """
 
         :param reader:
@@ -29,7 +29,7 @@ class CloseDoor:
 
         self.location = Location(reader)
 
-    def run(self, maze, assets):
+    def decode(self, maze, assets):
 
         return f"Close door at {self.location}"
 

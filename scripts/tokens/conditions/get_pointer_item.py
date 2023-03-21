@@ -13,9 +13,9 @@ class GetPointerItem:
         self.action = None
         self.id = None
 
-        self.decode(reader)
+        self.read(reader)
 
-    def decode(self, reader):
+    def read(self, reader):
         """
 
         :param reader:
@@ -31,7 +31,7 @@ class GetPointerItem:
         elif self.action == 0xCF:
             self.id = reader.read_ubyte()
 
-    def run(self, maze, assets):
+    def decode(self, tokens, maze, assets):
 
         if self.action == 0xF5:
             return "hand item"

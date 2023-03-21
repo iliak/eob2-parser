@@ -13,9 +13,9 @@ class GiveXP:
         self.type = None
         self.amount = None
 
-        self.decode(reader)
+        self.read(reader)
 
-    def decode(self, reader):
+    def read(self, reader):
         """
 
         :param reader:
@@ -27,7 +27,9 @@ class GiveXP:
         self.type = reader.read_ubyte()
         self.amount = reader.read_ushort()
 
-    def run(self, maze, assets):
+    def decode(self, maze, assets):
 
         if self.type == 0xE2:  # -30:
             return f"Give {self.amount} XP to the team [type: {self.type}]"
+        else:
+            return f"Give XP ERROR"

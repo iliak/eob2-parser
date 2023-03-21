@@ -10,5 +10,5 @@ class PushValue:
 
         self.value = value
 
-    def run(self, maze, assets):
+    def decode(self, tokens, maze, assets):
         return f"push 0x{self.value:04X}"

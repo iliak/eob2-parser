@@ -15,9 +15,9 @@ class SetFlag:
         self.flag = None
         self.monster_id = None
 
-        self.decode(reader)
+        self.read(reader)
 
-    def decode(self, reader):
+    def read(self, reader):
         """
 
         :param reader:
@@ -40,7 +40,7 @@ class SetFlag:
         elif self.type == -47:     # Party can't sleep ??
             pass
 
-    def run(self, maze, assets):
+    def decode(self, maze, assets):
 
         if self.type == -17:       # -17 level
             return f"Set level flag {self.flag}"

@@ -5,13 +5,10 @@ class End:
     """
 
     def __init__(self, reader):
+        pass
 
-        self.decode(reader)
+    def read(self, reader):
+        pass
 
-    def decode(self, reader):
-
-        if not reader:
-            return
-
-    def run(self, maze, assets):
+    def decode(self, maze, assets):
         return "End"
