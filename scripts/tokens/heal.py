@@ -25,13 +25,13 @@ class Heal:
         if not reader:
             return
 
-        self.target = reader.read_byte()
+        self.target = reader.read_ubyte()
         self.points = reader.read_ubyte()
 
     def run(self, maze, assets):
 
         if self.target:
-            return "Heal champion #{id} of {points} points".format(id=self.target, points=self.points)
+            return f"Heal champion #{self.target} of {self.points} points"
         else:
-            return "Heal team of {points} points".format(points=self.points)
+            return f"Heal team of {self.points} points"
 

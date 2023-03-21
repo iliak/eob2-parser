@@ -1,8 +1,8 @@
-
 class Dice:
     """
 
     """
+
     def __init__(self, reader=None):
         self.rolls = 0
         self.sides = 0
@@ -27,9 +27,8 @@ class Dice:
         return {
             'rolls': self.rolls,
             'sides': self.sides,
-            'base': self.base,
+            'base':  self.base,
         }
 
     def __str__(self):
-
-        return "({rolls}d{sides})+{base}".format(rolls=self.rolls, sides=self.sides, base=self.base)
+        return f"({self.rolls}d{self.sides})+{self.base}"

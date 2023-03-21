@@ -1,3 +1,5 @@
+from enum import Enum
+
 from dice import Dice
 from location import Location
 from monster import Monster
@@ -222,11 +224,22 @@ class MonsterGfx:
         return self.label
 
 
+class TriggerFlag(Enum):
+    """
+    Flags used to trigger events
+    """
+    OnPartyEnter = 0x08
+    OnPartyLeave = 0x10
+    OnPutItem = 0x20
+    OnGetItem = 0x40
+    OnthrowItem = 0x80
+    OnClick = 0x800
+
+
 class Trigger:
     """
 
     """
-
     def __init__(self, reader=None):
         """
 
@@ -237,31 +250,6 @@ class Trigger:
         self.offset = None
 
         self.decode(reader)
-
-        """
-        flags:
-            A = 0x01,
-            B = 0x02,
-            C = 0x04,
-            OnPartyEnter = 0x08,	# Confirmed
-            D = 0x10,
-            HoleOrPressure = 0x20,
-            F = 0x40,
-            G = 0x80,
-            H = 0x100,
-            I = 0x200,
-            K = 0x400,
-            OnClick = 0x800,
-            M = 0x1000,
-            N = 0x2000,
-            O = 0x4000,
-            P = 0x8000,
-                        // item drop
-                        // item taken
-                        // party enter
-                        // party leave
-
-        """
 
     def decode(self, reader):
         """
@@ -281,10 +269,10 @@ class Trigger:
 
         :return:
         """
-        return {"offset": self.offset, "flags": self.flags, }
+        return {"offset": f"0x{self.offset:04X}", "flags": f"0x{self.flags:02X}"}
 
     def __str__(self):
-        return "{location}: offset: 0x{offset:04X}, flags: 0x{flags:02X}".format(location=self.location, offset=self.offset, flags=self.flags)
+        return "{location}: offset: 0x{offset:04X}, flags: 0x{flags:04X}".format(location=self.location, offset=self.offset, flags=self.flags)
 
 
 class Header:
@@ -589,9 +577,9 @@ class Inf:
             "timers":   [timer for timer in self.timers],
             # "headers": [header.decode() for header in self.headers],
             # "hunks": [hunk for hunk in self.hunks],
-            # "triggers": {trigger.location.coordinates(): trigger.run(self, assets) for trigger in self.triggers},
+            "triggers": {trigger.location.coordinates(): trigger.run(self, assets) for trigger in self.triggers},
             "messages": {k: v for k, v in enumerate(self.messages)},
-            "scripts":  [self.script.run(self, assets)],
+            "scripts":  self.script.run(self, assets),
             "monsters": [],
         }
 
@@ -623,7 +611,7 @@ def inf_decode():
 
     for file in files:
         inf = Inf(file)
-        inf.process('data/{file}'.format(file=file))
+        inf.process(f'data/{file}')
         infs[file] = inf
 
     return infs

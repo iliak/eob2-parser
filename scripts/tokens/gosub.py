@@ -1,7 +1,4 @@
-
-
-
-class Call:
+class GoSub:
     """
 
     :param reader:
@@ -14,7 +11,7 @@ class Call:
         :param reader:
         """
 
-        self.target = None
+        self.offset = None
 
         self.decode(reader)
 
@@ -27,10 +24,7 @@ class Call:
         if not reader:
             return
 
-        self.target = reader.read_ushort()
+        self.offset = reader.read_ushort()
 
     def run(self, maze, assets):
-
-        return "Call 0x{target:04X}" \
-            .format(target=self.target)
-
+        return f"GOSUB 0x{self.offset:04X}"

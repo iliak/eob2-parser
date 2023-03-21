@@ -25,5 +25,5 @@ class ImmediateShort:
         self.value = reader.read_ushort()
 
     def run(self, maze, assets):
-        return f"0x{self.value:04X}"
+        return f"{self.value}"
 

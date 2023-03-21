@@ -30,6 +30,4 @@ class IdentifyAllItems:
 
     def run(self, maze, assets):
 
-        return "Identify all items at {location}".format(
-            location=self.location
-        )
+        return f"Identify all items at {self.location}"

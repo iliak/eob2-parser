@@ -39,13 +39,13 @@ class ClearFlag:
     def run(self, maze, assets):
 
         if self.type == -17:
-            return "Clear level flag {flag}".format(flag=self.flag)
+            return f"Clear level flag {self.flag}"
 
         elif self.type == -16:
-            return "Clear global flag {flag}".format(flag=self.flag)
+            return f"Clear global flag {self.flag}"
 
         elif self.type == -28:
-            return "Clear dialog result flag".format()
+            return "Clear dialog result flag"
 
         elif self.type == -47:
-            return "Clear 'Prevent rest' flag".format()
+            return "Clear 'Prevent rest' flag"

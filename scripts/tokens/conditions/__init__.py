@@ -1,5 +1,4 @@
 from .and_ import And
-from .comparator import Comparator
 from .condition_d7 import ConditionD7
 from .condition_df import ConditionDF
 from .differents import Differents
@@ -30,4 +29,3 @@ from .push_false import PushFalse
 from .push_true import PushTrue
 from .push_value import PushValue
 from .roll_dice import RollDice
-from .unknown_condition import UnknownCondition

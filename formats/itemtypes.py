@@ -18,7 +18,7 @@ def itemtypes_decode():
                 # At which position in inventory it is allowed to be put. See InventoryUsage
                 'slots':           str(ItemSlotFlags(reader.read_ushort())),
                 'flags':           str(ItemFlags(reader.read_ushort())),
-                'armor_class':     reader.read_byte(),  # Adds to armor class
+                'armor_class':     reader.read_ubyte(),  # Adds to armor class
                 'allowed_classes': str(ProfessionFlags(reader.read_ubyte())),  # Allowed for this profession. See ClassUsage
                 'required_hand':   str(HandFlags(reader.read_ubyte())),  # Allowed for this hand
                 'damage_vs_small': str(Dice(reader)),

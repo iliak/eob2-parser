@@ -41,7 +41,7 @@ class NewItem:
 
         i = 1
         if self.flags & 1 == 1:
-            self.item_value = reader.read_byte()
+            self.item_value = reader.read_ubyte()
         if self.flags & 2 == 2:
             self.item_flag = reader.read_ubyte()
         if self.flags & 4 == 4:

@@ -33,12 +33,6 @@ class IsItemAtLocation:
     def run(self, maze, assets):
 
         if self.type == 0xFF00:
-            return "maze count items at {location}".format(
-                location=self.location
-            )
+            return f"maze count items at {self.location}"
         else:
-            return "maze count items of type 0x{type:04X} at {location}".format(
-                type=self.type, location=self.location
-            )
-
-
+            return f"maze count items of type 0x{self.type:04X} at {self.location}"

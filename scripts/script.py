@@ -19,10 +19,10 @@ class Script:
         0xF5: tokens.ClearFlag,
         0xF4: tokens.Heal,
         0xF3: tokens.Damage,
-        0xF2: tokens.Jump,  # GoTo
+        0xF2: tokens.Goto,  # GoTo
         0xF1: tokens.End,
         0xF0: tokens.Return,
-        0xEF: tokens.Call,  # GoSub
+        0xEF: tokens.GoSub,  # GoSub
         0xEE: tokens.Condition,
         0xED: tokens.ConsumeItem,  # RemoveItem
         0xEC: tokens.ChangeLevel,

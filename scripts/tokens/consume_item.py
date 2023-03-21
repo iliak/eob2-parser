@@ -28,14 +28,14 @@ class ConsumeItem:
         if not reader:
             return
 
-        self.type = reader.read_byte()
-        if self.type != -1:
+        self.type = reader.read_ubyte()
+        if self.type != 0xFF:
             self.location = Location(reader)
 
     def run(self, maze, assets):
 
-        if self.type == -1:
+        if self.type == 0xFF:
             return "Consume hand item"
         else:
-            return "Consume item of type {type} at {location}".format(type=self.type, location=self.location)
+            return f"Consume item of type {self.type} at {self.location}"
 

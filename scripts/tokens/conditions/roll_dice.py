@@ -29,5 +29,5 @@ class RollDice:
 
     def run(self, maze, assets):
 
-        return "throw dice {dice}".format(dice=self.dice)
+        return "dice {dice}".format(dice=self.dice)
 

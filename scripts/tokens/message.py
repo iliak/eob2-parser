@@ -1,5 +1,3 @@
-
-
 class Message:
     """
 
@@ -31,7 +29,4 @@ class Message:
         self.color = reader.read_ushort()
 
     def run(self, maze, assets):
-
-        return "Display message '{msg}' color: {color}" \
-            .format(color=self.color, msg=maze.messages[self.message_id])
-
+        return f"Message '{maze.messages[self.message_id]}' color: {self.color}"

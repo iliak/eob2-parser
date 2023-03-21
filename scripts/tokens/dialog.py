@@ -31,7 +31,7 @@ class Dialog:
             self.rect = reader.read_ubyte()
             self.x = reader.read_ushort()
             self.y = reader.read_ushort()
-            self.flags = reader.read_short()
+            self.flags = reader.read_ushort()
 
         elif self.type == -44:  # Close dialog
             pass
@@ -82,6 +82,5 @@ class Dialog:
             )
 
         elif self.type == -8:  #
-            return "Print dialog text: '{txt}' , Text #{y}: '{msg}'".format(
-                type=self.type, x=self.x, y=self.y, msg=maze.messages[self.y], txt=assets['texts'][self.x - 1]
-            )
+            return f"Print dialog text: '{assets['texts'][self.x - 1]}' , Text #{self.y}: '{maze.messages[self.y]}'"
+

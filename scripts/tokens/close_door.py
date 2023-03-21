@@ -31,5 +31,5 @@ class CloseDoor:
 
     def run(self, maze, assets):
 
-        return "Close door at {location}".format(location=self.location)
+        return f"Close door at {self.location}"
 

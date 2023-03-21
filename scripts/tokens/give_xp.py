@@ -24,12 +24,10 @@ class GiveXP:
         if not reader:
             return
 
-        self.type = reader.read_byte()
+        self.type = reader.read_ubyte()
         self.amount = reader.read_ushort()
 
     def run(self, maze, assets):
 
-        if self.type == -30:
-            return "Give {amount} XP to the team [type: {type}]".format(
-                amount=self.amount, type=self.type
-            )
+        if self.type == 0xE2:  # -30:
+            return f"Give {self.amount} XP to the team [type: {self.type}]"

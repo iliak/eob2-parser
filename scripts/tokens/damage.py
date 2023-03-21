@@ -1,4 +1,3 @@
-
 class Damage:
     """
 
@@ -33,20 +32,15 @@ class Damage:
         if not reader:
             return
 
-        self.target = reader.read_byte()
-        self.times = reader.read_byte()
-        self.itemOrPips = reader.read_byte()
-        self.mod = reader.read_byte()
-        self.flags = reader.read_byte()
-        self.savingThrowType = reader.read_byte()
-        self.savingThrowEffect = reader.read_byte()
+        self.target = reader.read_ubyte()
+        self.times = reader.read_ubyte()
+        self.itemOrPips = reader.read_ubyte()
+        self.mod = reader.read_ubyte()
+        self.flags = reader.read_ubyte()
+        self.savingThrowType = reader.read_ubyte()
+        self.savingThrowEffect = reader.read_ubyte()
 
     def run(self, maze, assets):
-
-        target = 'team ' if self.target == -1 else ''
-        return "Damage {target}{times} time(s) with item {item}, modifier: {mod}, flags: 0x{flags:02X}, " \
-               "savingThrowType: {type}, savingThrowEffect: {effect}".format(
-            target=target, times=self.times, item=self.itemOrPips, mod=self.mod, flags=self.flags,
-            type=self.savingThrowType, effect=self.savingThrowEffect
-        )
-
+        target = 'team ' if self.target == 0xFF else ''
+        return f"Damage {self.target}{self.times} time(s) with item {self.itemOrPips}, modifier: {self.mod}, flags: 0x{self.flags:02X}, " \
+               f"savingThrowType: {self.savingThrowEffect}, savingThrowEffect: {self.savingThrowEffect}"

@@ -1,4 +1,4 @@
-from .call import Call
+from .gosub import GoSub
 from .change_level import ChangeLevel
 from .change_wall import ChangeWall
 from .clear_flag import ClearFlag
@@ -12,7 +12,7 @@ from .end import End
 from .give_xp import GiveXP
 from .heal import Heal
 from .identify_item import IdentifyAllItems
-from .jump import Jump
+from .goto import Goto
 from .launcher import Launcher
 from .message import Message
 from .new_item import NewItem

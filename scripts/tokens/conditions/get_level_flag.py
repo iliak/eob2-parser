@@ -1,4 +1,3 @@
-
 class GetLevelFlag:
     """
 
@@ -27,5 +26,4 @@ class GetLevelFlag:
         self.flag = reader.read_ubyte()
 
     def run(self, maze, assets):
-
-        return "get level flag {flag}".format(flag=self.flag)
+        return f"level flag({self.flag})"

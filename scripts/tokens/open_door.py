@@ -31,4 +31,4 @@ class OpenDoor:
 
     def run(self, maze, assets):
 
-        return "Open door at {location}".format(location=self.location)
+        return f"Open door at {self.location}"

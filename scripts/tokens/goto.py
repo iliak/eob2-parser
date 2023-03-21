@@ -1,22 +1,18 @@
-
-class Jump:
+class Goto:
     """
 
     :return:
     """
 
     def __init__(self, reader):
-
-        self.addr = None
+        self.offset = None
         self.decode(reader)
 
     def decode(self, reader):
-
         if not reader:
             return
 
-        self.addr = reader.read_ushort()
+        self.offset = reader.read_ushort()
 
     def run(self, maze, assets):
-        return "Jump to [0x{target:04X}]".format(target=self.addr)
-
+        return f"Goto 0x{self.offset:04X}"
