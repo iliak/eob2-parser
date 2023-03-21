@@ -22,8 +22,8 @@ class Location:
         if not reader:
             return
 
-        self.h = reader.read_byte()
-        self.l = reader.read_byte()
+        self.h = reader.read_ubyte()
+        self.l = reader.read_ubyte()
 
         self.value = (self.l << 8) + self.h
         self.x = self.value & 0x1f
