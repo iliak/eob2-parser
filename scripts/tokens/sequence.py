@@ -25,7 +25,7 @@ class Sequence:
         if not reader:
             return
 
-        self.cmd = reader.read_byte()
+        self.cmd = reader.read_ubyte()
 
     def run(self, maze, assets):
 
@@ -41,13 +41,11 @@ class Sequence:
 
         :return:
         """
-        if self.cmd == -1:
+        if self.cmd == 0xFF: #-1:
             return 'Sequence: Check password'
-        elif self.cmd == -2:
+        elif self.cmd == 0xFE: #-2:
             return 'Sequence: Portal'
-        elif self.cmd == -3:
+        elif self.cmd == 0xFD: #-3:
             return 'Sequence: Final scene...'
 
-        return "Sequence: NPC #{id}".format(
-            id=self.cmd
-        )
+        return f"Sequence: NPC #{self.cmd}"

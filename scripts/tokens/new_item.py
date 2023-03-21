@@ -43,17 +43,17 @@ class NewItem:
         if self.flags & 1 == 1:
             self.item_value = reader.read_byte()
         if self.flags & 2 == 2:
-            self.item_flag = reader.read_byte()
+            self.item_flag = reader.read_ubyte()
         if self.flags & 4 == 4:
-            self.item_icon = reader.read_byte()
+            self.item_icon = reader.read_ubyte()
 
     def run(self, maze, assets):
 
-        if self.location.value == -1:
+        if self.location.value == 0xFF: #-1:
             return "New hand item id: {item_id} (value {value}, flags: {flags} 0x{flags:02x}, icon: {icon}]".format(
                 item_id=self.item_id, value=self.item_value, flags=self.flags, icon=self.item_icon)
 
-        elif self.location.value == -2:
+        elif self.location.value == 0xFE: #-2:
             return "New item #{item_id} on current block (value {value}, flags: {flags} 0x{flags:02x}, icon: {icon}]".format(
                 item_id=self.item_id, value=self.item_value, flags=self.flags, icon=self.item_icon)
 

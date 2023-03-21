@@ -1,7 +1,7 @@
 from location import Location
 
 
-class StealSmallItem:
+class StealItem:
     """
 
     :param reader:
@@ -28,17 +28,13 @@ class StealSmallItem:
         if not reader:
             return
 
-        self.whom = reader.read_byte()
+        self.whom = reader.read_ubyte()
         self.location = Location(reader)
         self.sub_position = reader.read_ubyte()
 
     def run(self, maze, assets):
 
-        if self.whom == -1:
-            return "Steal small item and drop it at {location}:{subpos}".format(
-                location=self.location, subpos=self.sub_position
-            )
+        if self.whom == 0xFF: #-1:
+            return f"Steal item and drop it at {self.location}:{self.sub_position}"
         else:
-            return "Steal small item member: {member} and drop it at {location}:{subpos}".format(
-                member=self.whom, location=self.location, subpos=self.sub_position
-            )
+            return f"Steal item member: {self.whom} and drop it at {self.location}:{self.sub_position}"

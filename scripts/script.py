@@ -12,7 +12,7 @@ class Script:
         0xFC: tokens.CloseDoor,
         0xFB: tokens.CreateMonster,
         0xFA: tokens.Teleport,
-        0xF9: tokens.StealSmallItem,
+        0xF9: tokens.StealItem,
         0xF8: tokens.Message,
         0xF7: tokens.SetFlag,
         0xF6: tokens.Sound,
@@ -69,10 +69,4 @@ class Script:
                 print("###########[ERROR] unknown opcode: 0x{opcode:02X}".format(opcode=opcode))
 
     def run(self, maze, assets):
-        lines = []
-        for id, offset in enumerate(self.tokens):
-            token = self.tokens[offset]
-            msg = token.run(maze, assets)
-            lines.append('[0x{offset:04X}] {token}'.format(offset=offset, token=msg))
-
-        return lines
+        return {f"0x{token:04X}": self.tokens[token].run(maze, assets) for token in self.tokens}

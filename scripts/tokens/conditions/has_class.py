@@ -25,10 +25,9 @@ class HasClass:
         if not reader:
             return
 
-        self.id = reader.read_byte()
+        self.id = reader.read_ubyte()
 
     def run(self, maze, assets):
 
-        return "check if character with class {name} is present"\
-            .format(name=classes[self.id])
+        return f"has class \"{classes[self.id]}\""
 

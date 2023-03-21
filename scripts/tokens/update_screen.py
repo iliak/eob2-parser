@@ -1,5 +1,3 @@
-
-
 class UpdateScreen:
     """
 
@@ -21,9 +19,7 @@ class UpdateScreen:
         :param reader:
         :return:
         """
-        if not reader:
-            return
+        pass
 
     def run(self, maze, assets):
-
         return "Update screen"

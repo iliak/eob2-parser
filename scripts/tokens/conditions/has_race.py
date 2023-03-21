@@ -29,5 +29,5 @@ class HasRace:
 
     def run(self, maze, assets):
 
-        return "check if character with race {race} is present".format(race=races[self.id])
+        return f"has race \"{races[self.id]}\""
 

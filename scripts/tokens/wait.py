@@ -29,5 +29,5 @@ class Wait:
 
     def run(self, maze, assets):
 
-        return "Wait {delay} ticks ({ms} ms)".format(delay=self.delay, ms=self.delay * 55)
+        return f"Wait {self.delay} ticks ({self.delay * 55} ms)"
 

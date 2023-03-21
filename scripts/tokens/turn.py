@@ -28,18 +28,16 @@ class Turn:
         if not reader:
             return
 
-        self.cmd = reader.read_byte()
+        self.cmd = reader.read_ubyte()
         self.dir = reader.read_ubyte()
-        i = 1
 
     def run(self, maze, assets):
 
-        if self.cmd == -15:
-            return "Change party direction to {dir}".format(dir=directions[self.dir])
+        if self.cmd == 0xF0:  # -15:
+            return f"Change party direction to {directions[self.dir]}"
 
-        elif self.cmd == -11:
-            return "Change flying item direction to {dir}".format(dir=directions[self.dir])
+        elif self.cmd == 0xF5:  # -11:
+            return f"Change flying item direction to {directions[self.dir]}"
 
         else:
             return '[ERROR] Turn'
-

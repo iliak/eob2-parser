@@ -34,7 +34,7 @@ class Sound:
     def run(self, maze, assets):
 
         if self.location.x or self.location.y:
-            return "Play environmental sound {id} at {location}".format(id=self.id, location=self.location)
+            return f"Play environmental sound {self.id} at {self.location}"
         else:
-            return "Play sound {id}".format(id=self.id)
+            return f"Play sound {self.id}"
 

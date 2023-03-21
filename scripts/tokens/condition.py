@@ -27,11 +27,14 @@ class Condition:
             return
 
         conditions = {
-            0xFE: Comparator,
-            0xFD: Comparator,
-            0xFB: Comparator,
-            0xF9: Comparator,
-            0xF8: Comparator,
+            0xFF: Equals,
+            0xFE: Differents,
+            0xFD: LessThan,
+            0xFC: LessEqualsThan,
+            0xFB: MoreThan,
+            0xF1: MoreEqualsThan,
+            0xF9: And,
+            0xF8: Or,
             0xF7: GetWallNumber,
             0xF5: IsItemAtLocation,
             0xF3: IsMonsterAtLocation,
@@ -75,6 +78,6 @@ class Condition:
 
         str = "If "
         for token in self.tokens:
-            str += token.run(maze, assets) + '|'
+            str += token.run(maze, assets) + ' | '
 
         return str + ' else goto 0x{target:04X}'.format(target=self.target)

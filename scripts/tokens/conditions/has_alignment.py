@@ -26,5 +26,5 @@ class HasAlignment:
         self.id = reader.read_ubyte()
 
     def run(self, maze, assets):
-        return "need alignment {id}".format(id=self.id)
+        return f"has alignment \"{self.id}\""
 

@@ -1,6 +1,6 @@
 class GetTriggerFlag:
     """
-
+    Get the trigger flag used to trigger the event
     """
 
     def __init__(self, reader):

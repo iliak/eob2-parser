@@ -4,23 +4,11 @@ class Comparator:
 
     """
 
-    def __init__(self, value=None):
+    def __init__(self, value):
         """
 
         :param reader:
         """
-        self.operator = None
-        self.text = None
-
-        self.decode(value)
-
-    def decode(self, value):
-        """
-
-        :param reader:
-        :return:
-        """
-
         self.operator = value
         if self.operator == 0xff:
             self.text = " == "
@@ -43,4 +31,4 @@ class Comparator:
 
     def run(self, maze, assets):
 
-        return "{value}".format(value=self.text)
+        return self.text

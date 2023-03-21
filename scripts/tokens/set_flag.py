@@ -43,17 +43,17 @@ class SetFlag:
     def run(self, maze, assets):
 
         if self.type == -17:       # -17 level
-            return "Set level flag {flag}".format(flag=self.flag)
+            return f"Set level flag {self.flag}"
 
         if self.type == -16:       # -16 global
-            return "Set global flag {flag}".format(flag=self.flag)
+            return f"Set global flag {self.flag}"
 
         elif self.type == -13:     # -13 monster
-            return "Set monster {monster} flag {flag}".format(monster=self.monster_id, flag=self.flag)
+            return f"Set monster {self.monster_id} flag {self.flag}"
 
         elif self.type == -28:
             return "Set dialog result to 1"
 
         elif self.type == -47:
-            return "Set 'Prevent rest' flag".format()
+            return "Set 'Prevent rest' flag"
 

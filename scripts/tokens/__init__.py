@@ -23,7 +23,7 @@ from .set_flag import SetFlag
 from .set_wall import SetWall
 from .sound import Sound
 from .special_event import SpecialEvent
-from .steal_item import StealSmallItem
+from .steal_item import StealItem
 from .teleport import Teleport
 from .turn import Turn
 from .update_screen import UpdateScreen
