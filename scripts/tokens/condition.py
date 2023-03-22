@@ -24,6 +24,7 @@ class Condition:
         0xED: GetPartyDirection,
         0xE9: GetWallSide,
         0xE7: GetPointerItem,
+        0xE4: DialogButton,
         0xE0: GetTriggerFlag,
         0xDF: OnSpell,
         0xDD: HasRace,
@@ -33,6 +34,8 @@ class Condition:
         0xD7: OnBash,
         0xD2: ImmediateShort,
         0xCE: HasAlignment,
+        0x68: Condition68,
+        0x02: Condition02,
         0x01: PushTrue,
         0x00: PushFalse,
     }
@@ -65,7 +68,7 @@ class Condition:
 
             type = self.conditions.get(opcode)
             if not type:
-                token = PushValue(opcode)
+                token = UnknownCondition(reader, opcode)
             else:
                 token = type(reader)
 

@@ -29,5 +29,5 @@ class HasRace:
 
     def decode(self, tokens, maze, assets):
 
-        return f"has race \"{races[self.id]}\""
+        return f"has race '{races[self.id]}'"
 

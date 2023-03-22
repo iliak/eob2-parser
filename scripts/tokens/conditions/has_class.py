@@ -29,5 +29,5 @@ class HasClass:
 
     def decode(self, tokens, maze, assets):
 
-        return f"has class \"{classes[self.id]}\""
+        return f"has class '{classes[self.id]}'"
 

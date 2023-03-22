@@ -1,6 +1,6 @@
-class PushValue:
+class DialogButton:
     """
-    BOGUS
+    Get the selected button from a dialog box
     """
 
     def __init__(self, value):
@@ -8,7 +8,7 @@ class PushValue:
 
         """
 
-        self.value = value
+        pass
 
     def decode(self, tokens, maze, assets):
-        return f"push 0x{self.value:04X}"
+        return f"Dialog button"

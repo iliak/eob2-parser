@@ -34,12 +34,12 @@ class GetPointerItem:
     def decode(self, tokens, maze, assets):
 
         if self.action == 0xF5:
-            return "hand item"
+            return "pointer item"
         elif self.action == 0xF6:
-            return "hand item value"
+            return "pointer item value"
         elif self.action == 0xE1:
-            return "hand item type"
+            return "pointer item type"
         elif self.action == 0xD0:
-            return "hand item unidentified name id == #{value}".format(value=self.id)
+            return "pointer item unidentified name id == #{value}".format(value=self.id)
         elif self.action == 0xCF:
-            return "hand item identified name id == #{value}".format(value=self.id)
+            return "pointer item identified name id == #{value}".format(value=self.id)

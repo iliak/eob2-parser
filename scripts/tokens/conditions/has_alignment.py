@@ -26,5 +26,5 @@ class HasAlignment:
         self.id = reader.read_ubyte()
 
     def decode(self, tokens, maze, assets):
-        return f"has alignment \"{self.id}\""
+        return f"has alignment '{self.id}'"
 

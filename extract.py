@@ -90,6 +90,7 @@ if __name__ == '__main__':
 
     # MAZ:  Maps
     assets['maz'] = maz_decode()
+    dump()
 
     # INF: Maps
     assets['inf'] = inf_decode()

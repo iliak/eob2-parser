@@ -67,13 +67,13 @@ class Dialog:
             return "Close dialog"
 
         elif self.type == -43:  # Init dialog sequence
-            return "Init dialog sequence"
+            return "Init dialog"
 
         elif self.type == -42:  # Draw dialog box
             return "Draw dialog box"
 
         elif self.type == -40:  # Run dialog
-            return "Run dialog '{txt}', Buttons: ['{b1}', '{b2}', '{b3}']".format(
+            return "Dialog '{txt}', Buttons: ['{b1}', '{b2}', '{b3}']".format(
                 text_id=self.text_id,
                 txt=assets['texts'][self.text_id - 1],
                 b1=maze.messages[self.buttons[0]] if self.buttons[0] != -1 else '',
@@ -82,5 +82,5 @@ class Dialog:
             )
 
         elif self.type == -8:  #
-            return f"Print dialog text: '{assets['texts'][self.x - 1]}' , Text #{self.y}: '{maze.messages[self.y]}'"
+            return f"Dialog: '{assets['texts'][self.x - 1]}' , Text #{self.y}: '{maze.messages[self.y]}'"
 
