@@ -6,3 +6,8 @@ Eye of The Beholder 2 file format extractor
  - run "pip install -r requirements.txt"
  - run "python extract.py"
  - look in build/ ;)
+
+
+
+
+Westwood CPS format : https://moddingwiki.shikadi.net/wiki/Westwood_CPS_Format
