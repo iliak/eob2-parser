@@ -34,7 +34,7 @@ class GetPointerItem:
     def decode(self, tokens, maze, assets):
 
         if self.action == 0xF5:
-            return "pointer item"
+            return "pointer item number"
         elif self.action == 0xF6:
             return "pointer item value"
         elif self.action == 0xE1:

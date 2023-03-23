@@ -1,6 +1,6 @@
-class DialogButton:
+class GetTeamSize:
     """
-    Get the selected button from a dialog box
+    Get the number of champion in the team
     """
 
     def __init__(self, value):
@@ -11,4 +11,4 @@ class DialogButton:
         pass
 
     def decode(self, tokens, maze, assets):
-        return f"Dialog button"
+        return f"team size"

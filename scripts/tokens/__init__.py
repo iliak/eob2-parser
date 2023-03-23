@@ -3,7 +3,7 @@ from .change_level import ChangeLevel
 from .change_wall import ChangeWall
 from .clear_flag import ClearFlag
 from .close_door import CloseDoor
-from .condition import Condition
+from .eval import Eval
 from .consume_item import ConsumeItem
 from .create_monster import CreateMonster
 from .damage import Damage
@@ -18,7 +18,7 @@ from .message import Message
 from .new_item import NewItem
 from .open_door import OpenDoor
 from .return_ import Return
-from .sequence import Sequence
+from .encounter import Encounter
 from .set_flag import SetFlag
 from .set_wall import SetWall
 from .sound import Sound

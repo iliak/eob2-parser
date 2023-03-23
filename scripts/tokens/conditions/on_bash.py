@@ -22,4 +22,11 @@ class OnBash:
         self.value = reader.read_ubyte()
 
     def decode(self, tokens, maze, assets):
-        return f"on bash(0x{self.value:02X})"
+        if self.value == 0xDC:
+            return f"last used item extra properties"
+        elif self.value == 0xE1:
+            return f"last used item type"
+        elif self.value == 0xF5:
+            return f"last used item value"
+        elif self.value == 0xF6:
+            return f"last used item"

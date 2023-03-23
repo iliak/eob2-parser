@@ -1,6 +1,6 @@
 
 
-class Sequence:
+class Encounter:
     """
 
     :param reader:
@@ -42,10 +42,10 @@ class Sequence:
         :return:
         """
         if self.cmd == 0xFF: #-1:
-            return 'Sequence: Check password'
+            return 'Encounter: Check password'
         elif self.cmd == 0xFE: #-2:
-            return 'Sequence: Portal'
+            return 'Encounter: Portal'
         elif self.cmd == 0xFD: #-3:
-            return 'Sequence: Final scene...'
+            return 'Encounter: Final scene...'
 
-        return f"Sequence: NPC #{self.cmd}"
+        return f"Encounter: NPC #{self.cmd}"

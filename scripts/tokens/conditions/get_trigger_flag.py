@@ -1,6 +1,8 @@
 class GetTriggerFlag:
     """
-    Get the trigger flag used to trigger the event
+
+    Get last script flag
+    https://github.com/scummvm/scummvm/blob/master/engines/kyra/script/script_eob.cpp#L1093
     """
 
     def __init__(self, reader):

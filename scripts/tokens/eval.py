@@ -1,30 +1,33 @@
 from .conditions import *
 
 
-class Condition:
+class Eval:
     """
 
+    See https://github.com/scummvm/scummvm/blob/master/engines/kyra/script/script_eob.cpp
     """
     conditions = {
         0xFF: Equals,
         0xFE: Differents,
-        0xFD: LessThan,
-        0xFC: LessEqualsThan,
-        0xFB: MoreThan,
-        0xFA: MoreEqualsThan,
+        0xFD: MoreThan,
+        0xFC: MoreEqualsThan,
+        0xFB: LessThan,
+        0xFA: LessEqualsThan,
         0xF9: And,
         0xF8: Or,
         0xF7: GetWallNumber,
-        0xF5: IsItemAtLocation,
-        0xF3: IsMonsterAtLocation,
+        0xF5: ItemCountAtLocation,
+        0xF3: IsMonsterAtLocation,  # TestBlockFlag
+        0xF2: IsItemAtLocation,
         0xF1: IsPartyAtLocation,
         0xF0: GetGlobalFlag,
         0xEF: GetLevelFlag,
         0xEE: Else,
         0xED: GetPartyDirection,
         0xE9: GetWallSide,
+        # 0xE8: GetTeamSize,
         0xE7: GetPointerItem,
-        0xE4: DialogButton,
+        0xE4: DialogResult,
         0xE0: GetTriggerFlag,
         0xDF: OnSpell,
         0xDD: HasRace,

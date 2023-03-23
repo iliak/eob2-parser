@@ -32,6 +32,8 @@ class Dialog:
             self.x = reader.read_ushort()
             self.y = reader.read_ushort()
             self.flags = reader.read_ushort()
+            # flags & 1 = border
+            # flags & 2 = fade
 
         elif self.type == -44:  # Close dialog
             pass

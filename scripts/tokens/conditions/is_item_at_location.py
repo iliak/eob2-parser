@@ -33,6 +33,6 @@ class IsItemAtLocation:
     def decode(self, tokens, maze, assets):
 
         if self.type == 0xFF00:
-            return f"item at {self.location}"
+            return f"is item at {self.location}"
         else:
-            return f"item of type 0x{self.type:04X} at {self.location}"
+            return f"is item of type 0x{self.type:04X} at {self.location}"

@@ -26,8 +26,6 @@ class IsPartyAtLocation:
         :return:
         """
 
-        if not reader:
-            return
         self.code = reader.read_ubyte()
 
         if self.code == 0xF5:   # Count items

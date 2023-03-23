@@ -23,7 +23,7 @@ class Script:
         0xF1: tokens.End,
         0xF0: tokens.Return,
         0xEF: tokens.GoSub,  # GoSub
-        0xEE: tokens.Condition,
+        0xEE: tokens.Eval,
         0xED: tokens.ConsumeItem,  # RemoveItem
         0xEC: tokens.ChangeLevel,
         0xEB: tokens.GiveXP,
@@ -31,7 +31,7 @@ class Script:
         0xE9: tokens.Launcher,
         0xE8: tokens.Turn,
         0xE7: tokens.IdentifyAllItems,
-        0xE6: tokens.Sequence,  # Encounter
+        0xE6: tokens.Encounter,
         0xE5: tokens.Wait,
         0xE4: tokens.UpdateScreen,
         0xE3: tokens.Dialog,
