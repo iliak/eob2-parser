@@ -1,0 +1,258 @@
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Black Crypt map file format</title>
+  </head>
+  <body>
+    Black Crypt map file format - "bcdfs" file.<br>
+	<br>
+		----- 1. File structure -----<br>
+		<br>
+		Game is divided into 13 maps, betwen loading screens.<br>
+		Each map contains:<br>
+		<br>
+		Offset data - always 52 bytes<br>
+		Map data - various size<br>
+		3950 bytes 00 (space to place items from invetory to floor etc.)<br>
+		<br>
+		And repeat 13 times.<br>
+		<br>
+		----- 2. Offset data -----<br>
+		<br>
+		Offset data appear at the beginning on each map but only in first map offset data is filled.<br>
+		Offset data in maps 2 - 13 is filled by 52 bytes 00.<br>
+		Offset data is 52 bytes long = 13 maps * 32bit value. 13 offsets to each map first byte in bcdfs file.<br>
+		<br>
+		Original Black Crypt bcdfs first offset data:<br>
+		00 00 00 00 first map adress.<br>
+		00 00 3A C7 second map adress.<br>
+		...<br>
+		00 02 87 36 last map adress.<br>
+		<br>
+		----- 3. Map data -----<br>
+		<br>
+		Game uses 13 maps up to 64x64. Many maps is divided to levels and must fit together to this 64x64.<br>
+		Four levels 32x32 or two 30x50 etc.<br>
+		<br>
+		First original map, first 7 bytes:<br>
+		00 00 00 00 1D 00 39<br>
+		<br>
+		First three 00 are unknown. Sometimes have values.<br>
+		<br>
+		Next is 00 1D - vertical map size (exacly - logic working), used once at map start<br>
+		00 - first vertical line on 64x64 map (bottom)<br>
+		1D - last line on 64x64 map (top) - level 2 max height is 29 (1D hex)<br>
+		This is only for game logic not map structure itself. Monsters, switches placed on map over this values are not moving etc.<br>
+		So when map is height 30 just set to 30.<br>
+		<br>
+		Next 00 39 - horizontal first and last square, used at every line starts<br>
+		00 - first square in line on 64x64 map (left)<br>
+		39 - last square in line on 64x64 map (right) - level 1 on left 0-27, level 2 on right 28-57, last square is 57 (39 hex).<br>
+		<br>
+		Now game reads 58 (0-57) squares data and start next line. Again two bytes 00 39 and 58 squares data.<br>
+		<br>
+		First map use 00 39 for all lines, but every line can be set independently to save space in file.<br>
+		<br>
+		Data starts from left bottom corner and goes to right, and from bottom to top.<br>
+		<br>
+		First map, two levels on 64x64 grid.
+		<br>
+		<img src="img/Map1.png" alt="Map1"><br>
+		<br>
+		Levels place on 64x64 map is designer choice, can be 2 on left and 1 on right, or one above the other.<br>
+		<br>
+		Example map with independent line length.<br>
+		<br>
+		<img src="img/Map2.png" alt="Map2"><br>
+		<br>
+		----- 4. Square -----<br>
+		<br>
+		Simple empty (no items, monsters etc.) square with or without walls is 4 bytes long and looks like.<br>
+		0F F1 00 00<br>
+		<br>
+		<b>0</b>F F1 00 00 - 4 bits is bitflag square type.<br>
+		+0 - floor (for automap presentation only)<br>
+		+1 - wall (for automap presentation only)<br>
+		+2 - darkness<br>
+		+4 - "spell failed" square<br>
+		+8 - water<br>
+		<br>
+		0<b>F F</b>1 00 00 - always F F<br>
+		<br>
+		0F F<b>1</b> 00 00 - assigns level number to square, because is many levels on one map and tels game to show correct level number.<br>
+		Each 64x64 map has own counter. First map Level 1 = 1, Level 2 = 2. Second map Level 3 = 1, Level 4 = 2, Level 5 = 3 etc.<br>
+		Level number offset is in bcdft file.<br>
+		<br>
+		0F F1 <b>0</b>0 00 - 4 bits is bitflag assign walls to square, each square has own walls.<br>
+		+0 None<br>
+		+1 North<br>
+		+2 East<br>
+		+4 South<br>
+		+8 West<br>
+		<br>
+		0F F1 0<b>0 00</b> - 12 bits is used to set unique item, monster etc. number on 64x64 map sorted from bottom left corner and goes to right.<br>
+		Each 64x64 map has own counter. If its 000, read next square. If 001-FFF reads item, monster etc. data, then must be 000 to read next square.<br>
+		<br>
+		----- 5. Map -----<br>
+		<br>
+		Wall bits for each square on map.<br>
+		<img src="img/Map3.png" alt="Map3"><br>
+		<br>
+		And full map bytecode.<br>
+		<code>
+		Set vertical first and last line: 00 04<br>
+		Line 0: 02 06 1FF10000 1FF10000 1FF10000 1FF10000 1FF10000<br>
+		Line 1: 00 06 1FF10000 1FF10000 1FF10000 0FF1C000 0FF14000 0FF17000 1FF10000<br>
+		Line 2: 00 06 1FF10000 0FF1D000 0FF14000 0FF10000 0FF13000 1FF10000 1FF10000<br>
+		Line 3: 00 05 1FF10000 1FF10000 0FF19000 0FF13000 1FF10000 1FF10000<br>
+		Line 4: 01 04 1FF10000 1FF10000 1FF10000 1FF10000<br>
+		</code>
+		<br>
+		More levels on map and walls bytecode.<br>
+		<img src="img/Map4.png" alt="Map4"><br>
+		<br>
+		Blue - level 1; Green - level 2; Yellow - level 3.<br>
+		Each level is invisible to other one. Each level left and bottom square intersection is in game 0 - 0 coordinates.<br>
+		<br>
+		And full map bytecode.<br>
+		<code>
+		Set vertical first and last line: 00 06<br>
+		Line 0: 00 07 1FF10000 1FF10000 1FF10000 0FF00000 1FF30000 1FF30000 1FF30000 1FF30000<br>
+		Line 1: 00 07 1FF10000 0FF1E000 1FF10000 0FF00000 1FF30000 0FF3D000 0FF36000 1FF30000<br>
+		Line 2: 00 07 1FF10000 0FF1B000 1FF10000 0FF00000 1FF30000 1FF30000 0FF3A000 1FF30000<br>
+		Line 3: 00 07 1FF10000 1FF10000 1FF10000 0FF00000 0FF00000 1FF30000 0FF3A000 1FF30000<br>
+		Line 4: 00 07 1FF20000 1FF20000 1FF20000 1FF20000 1FF20000 1FF30000 1FF3B000 1FF30000<br>
+		Line 5: 00 07 1FF20000 0FF2D000 0FF25000 0FF27000 1FF20000 1FF30000 1FF30000 1FF30000<br>
+		Line 6: 00 04 1FF20000 1FF20000 1FF20000 1FF20000<br>
+		</code>
+		<br>
+		One way wall or wall that can be opened looks that.<br>
+		<img src="img/Map5.png" alt="Map5"><br>
+		<br>
+		Its possible to walk from 2 to 3 because no wall on east, but from 3 to 2 not, wall on west.<br>
+		Uses floor tile but game renders wall automaticly on automap when find one side of a wall.<br>
+		<br>
+		----- 6. Items, monsters and structures -----<br>
+		<br>
+		List of items and explained bytecode is <a href="items.html">here</a>.<br>
+		List of monsters and explained bytecode is <a href="monsters.html">here</a>.<br>
+		List of structures and explained bytecode is <a href="structures.html">here</a>.<br>
+		<br>
+		----- 7. Placing things -----<br>
+		<br>
+		Placing something in dungeon is a inserting data between squares, its unique number 000-FFF and data what you want to insert.<br>
+		Higher item number is on top when two or more items ocupied identical place.<br>
+		<br>
+		Square with War Hammer<br>
+		<code>
+		0FF1A01B - Square data and unique number 01B<br>
+		000700003B010000012C007D0000FFFF0000 - War Hammer<br>
+		0000 - to read next square 0 000<br>
+		next square<br>
+		</code>
+		<br>
+		Two or more things on square<br>
+		<code>
+		0FF1E004 - Square data and unique number 004<br>
+		000D01354F04000000C80064000700000003 - Scroll of Dispelling<br>
+		0005 - next unique number 0 005<br>
+		001200724F0500000041005A0002009E0258 - Water Skin<br>
+		0006 - next unique number 0 006<br>
+		003900004016000000000000000000000000 - Alcove<br>
+		0000 - to read next square 0 000<br>
+		next square<br>
+		</code>
+		<br>
+		Number rules changes when container with items is used<br>
+		<code>
+		0FF1A031 - Square data and unique number 031<br>
+		001B01DCCF1300FE01F400280 032 03070004 - Backpack, uses next unique number (032) inside to start carrying items in container<br>
+		0000 - first item in cointainer unique number 0 000 because is set earlier (032)<br>
+		000D008BCF04000000C8006401C000000003 - Glyph Scroll<br>
+		0033 - next item in cointainer unique number 0 033<br>
+		00140220CF0E080200320032000000FA0002 - Apple<br>
+		0000 - to read next square 0 000<br>
+		next square<br>
+		</code>
+		<br>
+		When something is before container, previous rules works, but changed when something is after container<br>
+		<code>
+		0FF1D04D - Square data and unique number 04D<br>
+		000501868F13002500C8015E0 04E 00FA0005 - Quiver, uses next unique number (04E) for carrying, not for next item but for first thing outside container<br>
+		0051 - first item in container have highest unique number of all items in container 0 051<br>
+		0006018D8F250000000F00190000FFFF0000 - Arrow<br>
+		004F - next item in container unique number 0 04F<br>
+		0006018D8F250100000F00190000FFFF0000 - Arrow<br>
+		0050 - next item in container unique number 0 050<br>
+		0006018D8F250200000F00190000FFFF0000 - Arrow<br>
+		0000 - first item outside container unique number 0 000 stops carrying, set earlier (04E)<br>
+		0004019389240000009600AF0000FFFF0000 - Bow<br>
+		0052 - next unique number 0 052<br>
+		003900008016000000000000000000000000 - Alcove<br>
+		0000 - to read next square 0 000<br>
+		next square<br>
+		</code>
+		<br>
+		Monsters can carry something and uses that same rules like container<br>
+		<code>
+		0FF200C8 - Square data and unique number 0C8<br>
+		80B20A3AF0850B0000C80 0C9 0000000000000000000000000001007D008C00040004FF000000 - Two Head, unique number (0C9) for carrying<br>
+		0000 - next unique number 0 000 because is set earlier (0C9)<br>
+		00C801A9FF060000000A000F000300000000 - Emerald Key<br>
+		0000 - to read next square 0 000<br>
+		next square<br>
+		</code>
+		<br>
+		Monster, switch/presure plate/alcove/trap/plaque/special panel with actions, use stacking bytes if something is placed on square after it<br>
+		Monster and Throwing Dagger<br>
+		<code>
+		0FF1D00B - Square and unique number 00B<br>
+		80B30775F0840A00002000000000000600000 00C 0000000000010012002200040004FF000000 - Stone Eye, unique number (00C) for stacking<br>
+		0000 - next unique number 0 000 because is set earlier (00C)<br>
+		000101659D28000000320032000000010000 - Throwing Dagger<br>
+		0000 - to read next square 0 000<br>
+		next square<br>
+		</code>
+		<br>
+		Chain from level 10, big glop carrying 4 little glops, is monster after monster so almost all stacking each other and one carrying meat<br>
+		<code>
+		0FF10046 - Square and unique number 046<br>
+		804B0C2CF083060300410 047 41060000000000000000000000010096004100040004FF000000 - Big glop, unique number (047) for carrying<br>
+		0000 - next unique number 0 000 because is set earlier (047)<br>
+		804C0624F0810201001900000000000000000 048 000000000001005A001900040004FF000000 - Little glop, unique number (048) for stacking<br>
+		0000 - next unique number 0 000 because is set earlier (048)<br>
+		804C0624F0810201001900000000000000000 049 000000000001005A001900040004FF000000 - Little glop, unique number (049) for stacking<br>
+		0000 - next unique number 0 000 because is set earlier (049)<br>
+		804C0624F0810201001900000000000000000 04A 000000000001005A001900040004FF000000 - Little glop, unique number (04A) for stacking<br>
+		0000 - next unique number 0 000 because is set earlier (04A)<br>
+		804C0624F081060000230 04B 8000000000000000000000000001005A002300040004FF000000 - Little glop, unique number (04B) for carrying<br>
+		0000 - next unique number 0 000 because is set earlier (04B)<br>	
+		0015000BFF0E00020064004B000001C20002 - Meat<br>
+		0000 - to read next square 0 000<br>
+		next square<br>
+		</code>
+		<br>
+		Switch/presure plate/alcove/trap/plaque/special panel with actions use stacking bytes if something is placed on square after it, but cut two bytes unique number from next thing<br>
+		<code>
+		0FF2F0EE - Square and unique number 0EE<br>
+		003E0000801D0000000000000062000000000 0EF 11010B250100016311010D250100036417010D2501001D00 - Switch witch actions, unique number (0EF) for stacking<br>
+		00CC03B82F06000000000000000700000000 - Fork Key, cutted unique number bytes, set earlier (0EF)<br>
+		00F0 - next unique number 0 0F0<br>
+		003900002016000000000000000000000000 - Alcove<br>
+		0000 - to read next square 0 000<br>
+		next square<br>
+		</code>
+		<br>
+		Its all my knowledge about map format and data. Incomplete and may have errors because done by hand and own observations, maybe the wrong ones.<br>
+		Questions? Errors? Send me info.<br>
+		<a href="mailto:doomer@op.pl">e-mail</a><br>
+		<a href="https://www.ppa.pl/forum/strefa-tworcow/44170/blackest-crypt-5-nowych-map-do-black-crypt">ppa.pl</a><br>
+		<a href="http://eab.abime.net/showthread.php?t=110276">eab.abime.net</a><br>
+		<br>
+		<a href="index.html">back</a>
+		<br>
+		<br>
+		<br>
+		<br>
+		<br>
+</html>

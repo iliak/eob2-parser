@@ -1,0 +1,338 @@
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Black Crypt dungeon structures</title>
+  </head>
+  <body>
+	Black Crypt dungeon structures.<br>
+	This list is created from structures placed on dungeon.<br>
+	Any structure is around 20 bytes inserted every time to dungeon file, plus actions if its switch etc.<br>
+	Some types splited to be more clear, like glyph/magic field/illusionary wall its one type and used bits is too confusing.<br>
+	<br>
+	X is for unique number and it's not structure data itself, but must be set.<br>
+	<br>
+	<code>
+	Door + frame<br>
+	X XX 00 aa 00 00 bb 11 00 00 00 00 00 00 00 00 00 cc 00 00<br>
+	aa - gfx; first tileset  35 - grate, 36 - full, other tilesets 35 - full, 36 - grate / 8 bits<br>
+	bb - orientation; 50 - walkable WE, A0 - walkable NS / 8 bits<br>
+	cc - initial state; 00 - closed, 01 - opened, 02 - closed blocked (locked by key); 03 - opened blocked (frame for stairs, fountain, special panel) / 8 bits<br>
+	<br>
+	Door switch<br>
+	X XX 00 37 00 00 aa 0F 00 0b 00 00 00 00 00 cc 00 0d 00 00<br>
+	+ actions (actions explained at end)<br>
+	aa - orientation, must by that same as door orientation; 50 - walkable WE; A0 - walkable NS / 8 bits<br>
+	b  - switch position bitflag; +1 - NW, +2 - NE, +4 - SE, +8 - SW / 4 bits<br>
+	cc - action ID; 00 - no extra actions, just operate door / 8 bits<br>
+	d - number of click to start action; 0-2 used once at level 27 to generate Skeleron Lords, max clicks is 2 / 4 bits<br>
+	note: need door frame, switch always operate door and dont need configured action for this, just set cc - 00 and ignore action bits to be standard door switch<br>
+	<br>
+	Door lock<br>
+	X XX 00 aa 00 00 bb 22 00 0c 00 00 00 00 00 dd 00 01 00 00<br>
+	aa - lock gfx, 51 - 53 (any map has own 3 gfx) / 8 bits<br>
+	bb - orientation, must by that same as door orientation; 50 - walkable WE; A0 - walkable NS / 8 bits<br>
+	c - lock position bitflag; +1 - NW, +2 - NE, +4 - SE, +8 - SW / 4 bits<br>
+	dd - key number; must be that same as corresponding key cc byte / 8 bits<br>
+	note: need door frame<br>
+	<br>
+	Pillar<br>
+	X XX 00 38 00 00 00 17 00 00 00 00 00 aa 00 00 00 00 00 00<br>
+	aa - initial state; 00 - on, 01 - off / 8 bits<br>
+	<br>
+	Alcove<br>
+	X XX 00 39 00 00 a0 16 bb bb 00 00 00 cc 00 dd 00 ee 00 00<br>
+	+ actions<br>
+	aa - alcove position on square; N - 1, E - 2, S - 4, W - 8 / 4 bits<br>
+	bbbb - specified item as a trigger; uses item "gfx number" bytes, 00 00 - none / 16 bits<br>
+	cc - trigger initial state; 00 - on, 02 - off / 8 bits<br>
+	dd - action ID; 00 - no actions, standard alcove / 8 bits<br>
+	ee - trigger; 01 - any item in, 02 - specified item in, 03 - any item out, 04 - specified item out / 8 bits<br>
+	<br>
+	Fountain<br>
+	X XX 00 45 00 00 00 1F 00 aa 00 bb 00 00 00 00 00 00 00 00<br>
+	aa - charges; FF - infinite / 8 bits<br>
+	bb - effect; 9E - water, 98 - poison, 9B - disease, 96 - healing, 9D - extra healing, and much more values / 8 bits<br>
+	note: need door frame and set as opened blocked<br>
+	<br>
+	Illusionary Wall<br>
+	X XX 00 C1 01 F3 00 10 00 00 00 00 00 aa 00 01 00 00 00 00<br>
+	aa - initial state; 00 - on, 01 - off / 8 bits<br>
+	<br>
+	Magic Field<br>
+	X XX 00 48 00 00 00 10 00 aa 00 00 00 bb 00 02 00 cc 00 dd<br>
+	aa - additional field to remove, height; 00 - none, coordinates on 64x64 map / 8 bits<br>
+	bb - initial state; 00 - on, 01 - off / 8 bits<br>
+	cc - field level / 8 bits<br>
+	dd - additional field to remove, width; 00 - none, coordinates on 64x64 map / 8 bits<br>
+	<br>
+	Glyph<br>
+	X XX 00 3C 00 00 00 10 00 00 00 00 00 aa 00 03 00 bb 00 cc<br>
+	aa - initial state; 00 - on, 01 - off / 8 bits<br>
+	bb - glyph level / 8 bits<br>
+	cc - glyph type; 01 - death, 02 - fire, 03 - ice, 04 - poison / 8 bits<br>
+	<br>
+	Pit<br>
+	X XX aa aa 00 00 00 14 00 00 00 00 00 bb 00 cc 00 dd 00 ee<br>
+	aaaa - gfx; 00 3A - floor, 00 3B - ceiling / 16 bits<br>
+	bb - initial state; 00 - on, 01 - off / 8 bits<br>
+	cc - destination, width; coordinates on 64x64 map / 8 bits<br>
+	dd - destination, height; coordinates on 64x64 map / 8 bits<br>
+	ee - pit type; 00 - floor, 01 - ceiling / 8 bits<br>
+	note: game bug drops party when ceiling pit opens at square where party stands<br>
+	<br>
+	Stairs<br>
+	X XX 00 44 00 00 00 12 00 aa 00 00 00 00 00 bb 00 cc 00 dd<br>
+	aa - destination map number; 00 if destination is another level on that same map / 8 bits<br>
+	bb - destination, width; coordinates on 64x64 map / 8 bits<br>
+	cc - destination, height; coordinates on 64x64 map / 8 bits<br>
+	dd - gfx; 02 - stairs up; 03 - stairs down / 8 bits<br>
+	note: need door frame and set as opened blocked<br>
+	<br>
+	Teleport<br>
+	X XX 00 40 00 00 00 12 00 00 00 aa 00 bb 00 cc 00 dd 00 ee<br>
+	aa - rotation; clockwise, 00 - none, 01 - 90', 02 - 180', 03 - 270' / 8 bits<br>
+	bb - initial state; 00 - on, 01 - off / 8 bits<br>
+	cc - destination, width; coordinates on 64x64 map / 8 bits<br>
+	dd - destination, height; coordinates on 64x64 map / 8 bits<br>
+	ee - gfx; 00 - invisible, 01 - visible, 05 - invisible and invisible on automap / 8 bits<br>
+	<br>
+	Spinner<br>
+	X XX 00 1E 00 00 0F 12 00 00 00 aa 00 bb 00 00 00 00 00 04<br>
+	aa - rotation; clockwise,  00 - none, 01 - 90', 02 - 180', 03 - 270' / 8 bits<br>
+	bb - initial state; 00 - on, 01 - off / 8 bits<br>
+	<br>
+	Monster Generator<br>
+	X XX 00 E8 01 97 aa 2E 00 00 00 bb 00 cc 00 dd 00 ee ff ff<br>
+	aa - ?; 01, 0F, F0 / 8 bits?<br>
+	bb - ?; 00, if aa byte is 01 then C8 / 8 bits?<br>
+	cc - ?; 00, if aa byte is 01 then 96 / 8 bits?<br>
+	dd - total number of generations / 8 bits<br>
+	ee - delay betwen generations; 00 lowest / 8 bit<br>
+	ffff - source square; square number from bottom left map corner and goes to right on 64x64 map / 16 bits<br>
+	note: source square must contain monster on it, if not game freeze; creates exacly monster copy from source square on monster generator square<br>
+	or one square to N, E, S, W if occupied; dont place generator next to glyph, teleporter etc. to prevent generate on it and freeze game<br>
+	sometimes name bytes "01 97" is 00 00<br>
+	<br>
+	Plaque<br>
+	X XX 00 49 00 00 a0 20 00 00 00 00 00 00 00 bb 00 cc 00 00<br>
+	aa - plaque position on square; 1 - N, 2 - E, 4 - S, 8 - W / 4 bits<br>
+	bb - text number; texts from bcdft file, 2D - "insert your name here" medusa plaques / 8 bits<br>
+	cc - minimum character level to read without read runes spell / 8 bits<br>
+	<br>
+	Plaque Input<br>
+	X XX 00 1F 00 00 aF 21 00 bb 00 00 00 00 00 cc 00 dd 00 00<br>
+	+ actions<br>
+	aa - plaque position on square; 1 - N, 2 - E, 4 - S, 8 - W / 4 bits<br>
+	bb - answer number; texts from bcdft file / 8 bits<br>
+	cc - action ID / 8 bits<br>
+	dd - question number; texts from bcdft file, 2E - random protection / 8 bits<br>
+	<br>
+	Statue (empty - "new additions")<br>
+	X XX 00 BD 0C EA 00 2F 00 00 00 00 00 aa 00 bb 00 00 00 00<br>
+	aa - initial state; 00 - on, 01 - off, always set to 01 / 8 bits<br>
+	bb - gfx?; 00 - 02 / 8 bit?<br>
+	note: map 11 only<br>
+	<br>
+	Statue<br>
+	X XX 00 BD 00 00 00 2F 00 00 00 00 00 aa 00 bb 00 04 00 00<br>
+	aa - initial state; 00 - on, 01 - off, always set to 00 / 8 bits<br>
+	bb - gfx; 00 - druid, 01 - mage, 02 - fighter / 8 bits<br>
+	note: map 11 only<br>
+	<br>
+	Switch<br>
+	X XX aa aa 00 00 b0 1D 00 00 00 cc 00 dd 00 ee 00 00 00 00<br>
+	+ actions<br>
+	aaaa - gfx; small - 00 3D, medium - 00 3E, large - 00 3F / 16 bits<br>
+	b - switch position on square; 1 - N, 2 - E, 4 - S, 8 - W / 4 bits<br>
+	cc - gfx state; 00 - normal, 01 - switch pressed / 8 bits<br>
+	dd - initial state; 00 - on, 02 - off / 8 bits<br>
+	ee - action ID / 8 bits<br>
+	<br>
+	Floor Plate<br>
+	X XX 00 42 00 00 00 1E 00 aa 00 bb 00 cc 00 dd 00 00 00 00<br>
+	+ actions<br>
+	aa - type; normal - 00, invisible and silent - 01 / 8 bits<br>
+	bb - gfx state; 00 - normal, 01 - plate pressed / 8 bits<br>
+	cc - initial state; 00 - on, 02 - off / 8 bits<br>
+	dd - action ID / 8 bits<br>
+	<br>
+	Trap<br>
+	X XX 00 4A 00 00 00 1E 00 01 00 00 00 aa 00 bb 00 01 00 00 00<br>
+	+ actions<br>
+	aa - initial state; 00 - on, 02 - off / 8 bits<br>
+	bb - action ID / 8 bits<br>
+	note: trap is floor plate with different gfx and trap action with destination coordinates to this trap itself<br>
+	<br>
+	The Golden Face Panel<br>
+	X XX 00 46 00 00 00 1F 00 00 00 00 00 00 00 aa 00 bb 00 00 00<br>
+	+ actions<br>
+	aa - action ID / 8 bits<br>
+	bb - panel number; 02, special panel item cc byte / bits<br>
+	note: map 2 only, originaly needs Eyes of True Sight to run actions<br>
+	<br>
+	The Druid Face Panel<br>
+	X XX 00 46 00 00 0F 1F 00 00 00 00 00 00 00 aa 00 bb 00 00 00<br>
+	+ actions<br>
+	aa - action ID / 8 bits<br>
+	bb - panel number; 03, special panel item cc byte / bits<br>
+	note: map 3 only, originaly needs Moon Key and Sun Key to run independent actions to each key<br>
+	<br>
+	The Tomb Panel<br>
+	X XX 00 46 00 00 00 1F 00 00 00 00 00 00 00 aa 00 bb 00 00 00<br>
+	+ actions<br>
+	aa - action ID / 8 bits<br>
+	bb - panel number; 04, originaly no item exist to run actions / bits<br>
+	note: map 4 only, decoration only, "smiley" :)<br>
+	<br>
+	The Skull Panel<br>
+	X XX 00 46 00 00 00 1F 00 00 00 E6 00 00 00 aa 00 bb 00 00 00<br>
+	+ actions<br>
+	aa - action ID / 8 bits<br>
+	bb - panel number; 06, special panel item cc byte / bits<br>
+	note: map 6 only, originaly needs 3 Skull Crown to run independent actions to each crown<br>
+	<br>
+	The Clam Panel<br>
+	X XX 00 46 00 00 00 1F 00 00 00 00 00 00 00 aa 00 bb 00 00 00<br>
+	+ actions<br>
+	aa - action ID / 8 bits<br>
+	bb - panel number; 09, special panel item cc byte / bits<br>
+	note: map 9 only, originaly needs Pearl to run actions<br>
+	<br>
+	The Medusa Panel<br>
+	X XX 00 46 00 00 00 1F 00 00 00 00 00 00 00 aa 00 bb 00 00 00<br>
+	+ actions<br>
+	aa - action ID / 8 bits<br>
+	bb - panel number; 0B, originaly no item exist to run actions / bits<br>
+	note: map 11 only, decoration only<br>
+	<br>
+    </code>
+	Finally actions for switch, floor plate, plaque with input, special panel and optionaly alcove or door switch.<br>
+	When one of above has action, some data reading was changed. Two bytes of unique number or 00 00 to skip to next square is moved betwen switch and action data.<br>
+	Switch<br>
+	0 05 00 3F 00 00 10 1D 00 00 00 00 00 00 00 02 00 00 00 00<br>
+	00 00 - two bytes moved from square end and skip to next square when action bytes ends<br>
+	+ actions<br>
+	If its not 00 00 but unique number, starts reading item/monster etc. data when actions ends, explained in stacking section.<br>
+	<br>
+	Action is basicaly 8 bytes it consists of: action ID, action, clicks to run, destination width, destination height, max runs, delay, action value.<br>
+	First action is 7 bytes because has no action ID, value moved to our switch action ID "02", next actions has standard 8 bytes.<br>
+	8 bytes explained:<br>
+	<code>
+	aa bb cc dd ee ff gg hh<br>
+	aa - action ID; any action has own unique number 01-FF for each map, sorted on 64x64 map from left to right and bottom to top<br>
+	bb - action itself:<br>
+	&nbsp;&nbsp;spell failed square: 00 - toggle, 01 - on, 02 - off<br>
+	&nbsp;&nbsp;pillar: 03 - toggle, 04 - on, 05 - off<br>
+	&nbsp;&nbsp;pit: 06 - toggle, 07 - on, 08 - off<br>
+	&nbsp;&nbsp;teleport/spinner: 09 - toggle, 0A - on, 0B - off<br>
+	&nbsp;&nbsp;trap (as presure plate): 0C - toggle, 0D - on, 0E - off<br>
+	&nbsp;&nbsp;wall: 0F - toggle, 10 - on, 11 - off<br>
+	&nbsp;&nbsp;monster generator: 12<br>
+	&nbsp;&nbsp;party held: 13<br>
+	&nbsp;&nbsp;items drop: 14<br>
+	&nbsp;&nbsp;teleportation: 15<br>
+	&nbsp;&nbsp;switch/floor plate/alcove trigger: 16 - on, 17 - off<br>
+	&nbsp;&nbsp;door: 18 - toggle, 19 - off, 1A - on<br>
+	&nbsp;&nbsp;trap (as damage): 1C - fire, 1D - ice<br>
+	&nbsp;&nbsp;teleportation and dungeon color: 1E<br>
+	&nbsp;&nbsp;dungeon color: 1F<br>
+	&nbsp;&nbsp;magic field/glyph/illusionary wall: 20 - toggle, 21 - on, 22 - off<br>
+	cc - number of clicks to run action<br>
+	dd - target width on 64x64 map<br>
+	ee - target height on 64x64 map<br>
+	ff - maximum runs (FF - infinite)<br>
+	gg - delay (nonlinear values)<br>
+	hh - action value; depends on action, if:<br>
+	&nbsp;&nbsp;wall: 00 - N, 01, - E, 02 - S, 03, - W<br>
+	&nbsp;&nbsp;monster generator: 00-FF - source square number, square can be empty and can generate anything, like items<br>
+	&nbsp;&nbsp;party held: held time<br>
+	&nbsp;&nbsp;teleportation: 00 - actual map, or map number 01-0D<br>
+	&nbsp;&nbsp;switch/floor plate/alcove trigger: 16 - alcove, 1D - switch, 1E - floor plate; specified structure on target square to interact<br>
+	&nbsp;&nbsp;trap damage: trap strength<br>
+	&nbsp;&nbsp;teleportation and dungeon color: color number<br>
+	&nbsp;&nbsp;dungeon color: color number<br>
+	</code>
+	<br>
+	If action is for example pit on, on target square must be pit with state off. Actions not create structure, only operate existing one.
+	Maximum runs is not maximum switch clicks, but maximum actions loops. If switch need 3 clicks to run action, its 1 run, 6 clicks 2 runs etc.<br>
+	Actions must be sorted by number of clicks to run action, from lowest to highest.<br>
+	When actions ends, its extra byte at end. 00 if its one shot actions without loops, or action ID that same as switch/floor plate/alcove action ID, works like "go to" first action and start loop.<br>
+	And examples, from Blackest Crypt of course;)<br>
+	<code>
+	<br>
+	Switch<br>
+	Unique number - 0 23, gfx large - 3F, position east - 20, structure type switch - 1D, gfx state on - 00, initial state - on 00, action ID - 0C<br>
+	&nbsp;0 23 00 3F 00 00 20 1D 00 00 00 00 00 00 00 0C 00 00 00 00<br>
+	00 00 - skips to next square when actions ends<br>
+	19 01 0C 05 01 00 00 - door off - 19, one click to run - 01, target width - 12, target height - 05, one run - 01, no delay - 00, no value - 00<br>
+	00 - no loop, actions ends<br>
+	next square data<br>
+	<br>
+	Switch<br>
+	unique number - 0 87, gfx small - 3D, position west - 80, structure type switch - 1D, gfx state on - 00, initial state on - 00, action ID - 47<br>
+	&nbsp;0 87 00 3D 00 00 80 1D 00 00 00 00 00 00 00 47 00 00 00 00<br>
+	00 00 - skips to next square when actions ends<br>
+	&nbsp;&nbsp;&nbsp;07 01 1A 10 FF 03 00 - &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pit on - 07, one click to run - 01, target width - 1A, target height - 10, infinite runs - FF, delay - 03, no value - 00<br>
+	48 08 01 1A 10 FF 06 00 - action ID - 48, pit off - 08, one click to run - 01, target width - 1A, target height - 10, infinite runs - FF, delay - 06, no value - 00<br>
+	49 07 02 1A 10 FF 03 00 - action ID - 49, pit on - 07, two clicks to run - 02, target width - 1A, target height - 10, infinite runs - FF, delay - 03, no value - 00<br>
+	4A 08 02 1A 10 FF 06 00 - action ID - 4A, pit off - 08, two clicks to run - 02, target width - 1A, target height - 10, infinite runs - FF, delay - 06, no value - 00<br>
+	4B 07 03 1A 10 FF 03 00 - action ID - 4B, pit on - 07, three clicks to run - 03, target width - 1A, target height - 10, infinite runs - FF, delay - 03, no value - 00<br>
+	4C 08 03 1A 10 FF 06 00 - action ID - 4C, pit off - 08, three clicks to run - 03, target width - 1A, target height - 10, infinite runs - FF, delay - 06, no value - 00<br>
+	4D 19 03 18 16 01 00 00 - action ID - 4D, door off - 19, three clicks to run - 03, target width - 18, target height - 16, one run - 01, no delay - 00, no value - 00<br>
+	47 - loop, must be that same as first action ID<br>
+	next square data<br>
+	<br>
+	Floor Plate<br>
+	unique number - 0 85, gfx - 00 42, structure type floor plate - 1E, invisible - 01, initial state on - 00, action ID - 19<br>
+	&nbsp;0 85 00 42 00 00 00 1E 00 01 00 00 00 00 00 19 00 00 00 00<br>
+	00 00 - skips to next square when actions ends<br>
+	&nbsp;&nbsp;&nbsp;0B 01 0C 25 01 00 00 - &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;teleport off - 0B, one click - 01, target width - 0C, target height - 25, one run - 01, no delay - 00, no value - 00<br>
+	1A 0F 01 36 26 01 00 03 - action ID - 1A, wall toggle - 0F, one click to run - 01, target width - 36, target height - 26, one run - 01, no delay - 00, operate west wall - 03<br>
+	1B 0F 01 36 26 01 20 03 - action ID - 1B, wall toggle - 0F, one click to run - 01, target width - 36, target height - 26, one run - 01, delay - 20, operate west wall - 03<br>
+	00 - no loop, actions ends<br>
+	next square data<br>
+	<br>
+	Alcove<br>
+	unique number - 0 06, gfx - 00 39, position south - 40, structure type alcove - 16, Scroll of Dispelling as trigger - 00 0D, trigger state on - 00, action ID - 01, specified item out - 04<br>
+	&nbsp;0 06 00 39 00 00 40 16 00 0D 00 00 00 00 00 01 00 04 00 00<br>
+	00 00 - skips to next square when actions ends<br>
+	&nbsp;&nbsp;&nbsp;05 01 11 03 01 00 00 - &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pillar off - 05, one click to run - 01, target width - 11, target height - 03, one run - 01, no delay - 00, no value - 00<br>
+	02 05 01 15 03 01 00 00 - action ID - 02, pillar off - 05, one click to run - 01, target width - 15, target height - 03, one run - 01, no delay - 00, no value - 00<br>
+	03 1A 01 13 06 01 00 00 - action ID - 03, door on - 1A, one click to run - 01, target width - 13, target height - 06, one run - 01, no delay - 00, no value - 00<br>
+	00 - no loop, actions ends<br>
+	next square data<br>
+	<br>
+	Trap<br>
+	unique number - 1 32, gfx trap - 4A, structure type floor plate - 1E, initial state on - 00, action ID - 4A<br>
+	&nbsp;1 32 00 4A 00 00 00 1E 00 01 00 00 00 00 00 4A 00 01 00 00<br>
+	00 00 - skips to next square when actions ends<br>
+	&nbsp;&nbsp;&nbsp;1C 01 3C 0B 01 00 07 - trap damage fire - 1C, one click to run - 01, target width - 3C, target height - 0B, one run - 01, no delay - 00, trap strength - 07<br>
+	00 - no loop, actions ends<br>
+	next square data<br>
+	<br>
+	The Golden Face Panel<br>
+	unique number - 1 33, gfx - 00 46, structure type special panel - 1F, action ID - 7D, special item number - 02<br>
+	&nbsp;1 33 00 46 00 00 00 1F 00 00 00 00 00 00 00 7D 00 02 00 00<br>
+	01 34 - next unique number, reads item/structure when actions ends<br>
+	&nbsp;&nbsp;&nbsp;10 01 14 2E 01 00 00 - &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;wall on - 10, one click to run - 01, target width - 14, target height - 2E, one run - 01, no delay - 00, operate north wall - 00<br>
+	7E 10 01 13 2F 01 00 01 - action ID - 7E, wall on - 10, one click to run - 01, target width - 13, target height - 2F, one run - 01, no delay - 00, operate east wall - 01<br>
+	7F 10 01 15 2F 01 00 03 - action ID - 7F, wall on - 10, one click to run - 01, target width - 15, target height - 2F, one run - 01, no delay - 00, operate west wall - 03<br>
+	80 10 01 14 30 01 00 02 - action ID - 80, wall on - 10, one click to run - 01, target width - 14, target height - 30, one run - 01, no delay - 00, operate south wall 02<br>
+	81 12 01 14 30 01 00 0B - action ID - 81, monster generator - 12, one click to run - 01, target width - 14, target height - 30, one run - 01, no delay - 00, source square - 0B<br>
+	82 12 01 0B 00 01 01 0A - action ID - 82, monster generator - 12, one click to run - 01, target width - 0B, target height - 00, one run - 01, delay - 01, source square - 0A<br>
+	83 06 01 14 2F 01 00 00 - action ID - 83, pit toggle - 06, one click to run - 01, target width - 14, target height - 2F, one run - 01, no delay - 00, no value 00<br>
+	84 0B 01 14 3B 01 00 00 - action ID - 84, teleport off - 0B, one click to run - 01, target width - 14, target height - 3B, one run - 01, no delay - 00, no value - 00<br>
+	00 - no loop, actions ends<br>
+	00 35 00 00 50 11 00 00 00 00 00 00 00 00 00 03 00 00 - door data, cutted first 2 bytes, because next unique number set earlier "01 34"<br>
+	00 00 - square ends, as usual<br>
+	next square<br>
+	</code>
+	<br>
+	<a href="bcdfs.html">back</a>
+	<br>
+	<br>
+	<br>
+	<br>
+	<br>
+  </body> 
+</html>

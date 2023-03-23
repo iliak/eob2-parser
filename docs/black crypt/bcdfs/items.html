@@ -1,0 +1,1269 @@
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Black Crypt items</title>
+  </head>
+  <body>
+    Black Crypt items.<br>
+	<br>
+	This list is created from items placed on dungeon and from save game (some clothes not present on dungeon).<br>
+	Any item is around 20 bytes inserted every time to dungeon file, so can be partialy custom as well.<br>
+	<br>
+	First 9 bytes means that same for all items, Axe for example:<br>
+	<br>
+	<code>
+	0 01 00 8D 02 51 19 01 00 00 00 FA 00 7D 00 00 FF FF 00 00<br>
+	| || || || || || || || ||<br>
+	a aa bb bb cc cc de ff gg<br>
+	<br>
+	aaa - unique number of anything placed on curent map (not level) / 12 bits<br>
+	bbbb - gfx number (also determines weapon hardcoded strength or special features like Ogre Blade) / 16 bits<br>
+	cccc - name offset (names present on bcdft file, starts on 115978 byte means 00 00 here) / 16 bits<br>
+	d - position on sqare (Alcoves: 1 - N; 2 - E; 4 - S; 8 - W; Floor: 3 - NE; 6 - SE; 9 - NW; C - SW) / 4 bits<br>
+	e - who can use item (bit flag: +1 Fighter; +2 Cleric; +4 Druid; +8 Magic User) / 4 bits<br>
+	ff - item type (defines how the last bytes work) / 8 bits<br>
+	gg - position in container (0-7 upper line, 8-F lower line, so Coffer uses 0, 1, 2, 8, 9, A) / 8 bits?<br>
+	</code>
+	<br>
+	Some items is doubled when uses other values than normal.<br>
+	X is for unique number and position on square and it's not item data itself, but must be set.<br>
+	<br>
+	<code>
+	############################<br>
+	*****FOOD*****<br>
+	############################<br>
+	<br>
+	Meat<br>
+	X XX 00 15 00 0B XF 0E 00 aa bb bb cc cc 00 00 dd dd 00 ee<br>
+	aa - always 02 if you want render proper picture state / 8 bits<br>
+	bbbb - weight / 16 bits<br>
+	cccc - size / 16 bits<br>
+	dddd - food units / 16 bits<br>
+	ee - actual charges; 02 - full, 01 - half / 8 bits<br>
+	<br>
+	Meat<br>
+	X XX 00 15 00 0B XF 0E 00 02 00 64 00 4B 00 00 01 C2 00 02 (standard Meat)<br>
+	X XX 00 15 00 0B XF 0E 00 02 00 64 00 4B 00 00 03 84 00 02 (used two times in game)<br>
+	<br>
+	Cheese<br>
+	X XX 00 13 00 F7 XF 0E 00 02 00 64 00 4B 00 00 01 5E 00 02<br>
+	<br>
+	Apple<br>
+	X XX 00 14 02 20 XF 0E 00 02 00 32 00 32 00 00 00 FA 00 02<br>
+	<br>
+	############################<br>
+	*****WATER*****<br>
+	############################<br>
+	<br>
+	Water Skin<br>
+	X XX 00 12 00 72 XF 05 00 aa bb bb cc cc 00 dd 00 ee ff ff<br>
+	aa - charges; 02 - full, 01 - half / 8 bits<br>
+	bbbb - weight / 16 bits<br>
+	cccc - size / 16 bits<br>
+	dd - maximum charges / 8 bits<br>
+	ee - effect; 9E - water, 98 - poison, 9B - disease, 96 - healing, 9D - extra healing, and much more values / 8 bits<br>
+	ffff - water units / 16 bits<br>
+	<br>
+	Water Skin<br>
+	X XX 00 12 00 72 XF 05 00 02 00 41 00 5A 00 02 00 9E 02 58<br>
+	<br>
+	############################<br>
+	*****POTION*****<br>
+	############################<br>
+	<br>
+	Potion of Healing<br>
+	X XX 00 18 00 B2 XF 05 00 aa 00 bb cc cc 00 dd 00 ee 00 00<br>
+	aa - charges; FF - infinite / 8 bits<br>
+	bbbb - weight / 16 bits<br>
+	cccc - size / 16 bits<br>
+	dd - maximum charges / 8 bits<br>
+	ee - effect / 8 bits<br>
+	<br>
+	Potion of Healing<br>
+	X XX 00 18 00 B2 XF 05 00 01 00 19 00 19 00 01 00 96 00 00<br>
+	<br>
+	Potion of Strength<br>
+	X XX 00 19 00 C4 XF 05 00 01 00 19 00 19 00 01 00 9C 00 00<br>
+	<br>
+	Potion of Cure Pioson<br>
+	X XX 00 16 00 D7 XF 05 00 01 00 19 00 19 00 01 00 99 00 00<br>
+	<br>
+	Potion of Cure Disease<br>
+	X XX 00 62 03 EB XF 05 00 01 00 19 00 19 00 01 00 9A 00 00<br>
+	<br>
+	Potion of Extra Healing<br>
+	X XX 00 64 04 10 XF 05 00 01 00 19 00 19 00 01 00 9D 00 00<br>
+	<br>
+	Potion of Invincibility<br>
+	X XX 00 63 04 28 XF 05 00 01 00 19 00 19 00 01 00 97 00 00<br>
+	<br>
+	Potion of Water Breathing<br>
+	X XX 00 17 08 C7 XF 05 00 01 00 19 00 19 00 01 00 9F 00 00<br>
+	<br>
+	############################<br>
+	*****WEAPON*****<br>
+	############################<br>
+	<br>
+	War Hammer<br>
+	X XX 00 07 00 00 XB 01 00 aa bb bb cc cc dd dd ee ee ff ff<br>
+	aa - charges/extra effect time; FF - infinite / 8 bits<br>
+	bbbb - cooldown time; minimal value is hardcoded so 00 00 not means no cooldown / 16 bits<br>
+	cccc - size / 16 bits<br>
+	dddd - extra damage; damage is hardcoded but can be added by this value / 16 bits<br>
+	eeee - extra effect; FF FF - none / 16 bits<br>
+	ffff - extra effect value / 16 bits (−32,767, +32,767)<br>
+	<br>
+	War Hammer<br>
+	X XX 00 07 00 00 XB 01 00 00 01 2C 00 7D 00 00 FF FF 00 00<br>
+	<br>
+	Ogre Blade<br>
+	X XX 00 8C 00 53 X1 02 00 00 01 2C 00 7D 00 01 FF FF 00 00<br>
+	<br>
+	Bow<br>
+	X XX 00 04 01 93 X9 24 00 00 00 96 00 AF 00 00 FF FF 00 00<br>
+	X XX 00 04 01 93 X9 24 00 00 00 96 00 AF 00 05 FF FF 00 00 (standard Bow find on Level 1, base for other Bows)<br>
+	<br>
+	Axe<br>
+	X XX 00 8D 02 51 X9 01 00 00 00 FA 00 7D 00 00 FF FF 00 00<br>
+	<br>
+	Long Sword +1<br>
+	X XX 00 03 03 C1 X1 02 00 00 01 2C 00 7D 00 01 FF FF 00 00<br>
+	<br>
+	Bow +1<br>
+	X XX 00 04 04 40 X9 24 00 00 00 96 00 AF 00 06 FF FF 00 00<br>
+	<br>
+	Hopeblade (Decrease food consumption)<br>
+	X XX 00 03 04 5C X1 02 00 FF 01 2C 00 7D 00 00 00 22 00 02<br>
+	<br>
+	Long Sword<br>
+	X XX 00 03 04 A0 X1 02 00 00 01 2C 00 7D 00 00 FF FF 00 00<br>
+	<br>
+	Sight Giver (Light)<br>
+	X XX 00 87 04 D4 X2 01 00 11 00 00 00 00 00 01 00 80 00 00<br>
+	<br>
+	Mace<br>
+	X XX 00 02 06 5A XB 01 00 00 00 FA 00 7D 00 00 FF FF 00 00<br>
+	<br>
+	Hammer<br>
+	X XX 00 07 06 73 XB 01 00 00 01 2C 00 7D 00 00 FF FF 00 00<br>
+	<br>
+	Frost Razer (Freeze)<br>
+	X XX 00 8A 06 B4 X1 00 00 0A 01 2C 00 7D 00 01 00 88 00 00<br>
+	<br>
+	Demon Dicer<br>
+	X XX 00 89 08 5E X1 02 00 00 00 00 00 00 00 03 FF FF 00 00<br>
+	<br>
+	Slayer Bow<br>
+	X XX 00 A2 08 73 X8 24 00 00 00 96 00 AF 00 07 FF FF 00 00<br>
+	<br>
+	Wizard Blade (Spell Level +2)<br>
+	X XX 00 59 08 7E X4 00 00 FF 00 3C 00 32 00 03 00 06 00 02<br>
+	<br>
+	Cavalier (HP Regeneration)<br>
+	X XX 00 03 08 FE X1 02 00 64 01 2C 00 7D 00 02 00 09 00 01<br>
+	<br>
+	Nether Staff (Intelligence +1)<br>
+	X XX 00 90 09 DA X4 01 00 FF 00 4B 00 7D 00 03 00 02 FF FB<br>
+	<br>
+	Doom Hammer (Chant of Doom)<br>
+	X XX 00 85 0A 04 XB 00 00 0A 01 2C 00 7D 00 03 00 87 00 00<br>
+	<br>
+	Staff<br>
+	X XX 00 90 0A 35 XF 01 00 00 00 4B 00 7D 00 00 FF FF 00 00<br>
+	<br>
+	Axe of Stone<br>
+	X XX 00 8F 0A 3B X9 01 00 00 00 FA 00 7D 00 00 00 00 00 00<br>
+	<br>
+	Stone Mace<br>
+	X XX 00 86 0A 6F XB 02 00 00 00 FA 00 7D 00 00 FF FF 00 00<br>
+	<br>
+	Flail<br>
+	X XX 00 A4 0A 7A XB 01 00 00 00 FA 00 7D 00 04 FF FF 00 00<br>
+	<br>
+	Wooden Mace<br>
+	X XX 00 88 0A A9 XB 01 00 00 00 FA 00 7D 00 00 FF FF 00 00<br>
+	<br>
+	Battle Axe +2<br>
+	X XX 00 8D 0B 3B X9 01 00 00 00 FA 00 7D 00 02 FF FF 00 00<br>
+	<br>
+	Wooden Mace +4<br>
+	X XX 00 88 0B AE XB 01 00 00 00 FA 00 7D 00 04 FF FF 00 00<br>
+	<br>
+	Evils Bane (Quake)<br>
+	X XX 00 8B 0C 45 X1 02 00 07 01 2C 00 7D 00 03 00 89 00 00<br>
+	<br>
+	Staff +2<br>
+	X XX 00 90 0D 24 XF 01 00 00 00 4B 00 7D 00 02 FF FF 00 00<br>
+	<br>
+	Darkfury +10 (Fire Wind)<br>
+	X XX 00 8B 0D FD X1 00 00 C8 01 2C 00 7D 00 0A 00 85 00 00<br>
+	<br>
+	Druid Bow +3<br>
+	X XX 00 04 80 0F X8 24 00 00 00 96 00 AF 00 08 FF FF 00 00<br>
+	<br>	
+	Vortex (Artefact)<br>
+	X XX 00 21 0B F9 X1 02 00 FF 01 2C 00 7D 00 05 00 8F 00 00<br>
+	<br>
+	Forcehammer (Artefact)<br>
+	X XX 00 47 0C F1 X2 02 00 FF 00 00 00 00 00 05 00 90 00 00<br>
+	<br>
+	############################<br>
+	*****ARROW/DAGGER*****<br>
+	############################<br>
+	<br>
+	Throwing Dagger<br>
+	XX XX 00 01 01 65 XD 28 00 00 aa aa bb bb cc cc dd dd 00 00<br>
+	aaaa - weight / 16 bits<br>
+	bbbb - size / 16 bits<br>
+	cccc - extra damage; damage is hardcoded but can be added by this value / 16 bits<br>
+	dddd - extra effect; FF FF - none / 16 bits<br>
+	<br>
+	Throwing Dagger<br>
+	X XX 00 01 01 65 XD 28 00 00 00 32 00 32 00 00 00 01 00 00<br>
+	<br>
+	Throwing Dagger +1<br>
+	X XX 00 01 01 17 XD 28 00 00 00 32 00 32 00 01 00 01 00 00<br>
+	<br>
+	Arrow<br>
+	X XX 00 06 01 8D XF 25 00 00 00 0F 00 19 00 00 FF FF 00 00<br>
+	<br>
+	Throwing Dagger +2<br>
+	X XX 00 01 05 9C XD 28 00 00 00 32 00 32 00 02 00 01 00 00<br>
+	<br>
+	Arrow +1<br>
+	X XX 00 06 08 6A XF 25 00 00 00 0F 00 19 00 01 FF FF 00 00<br>
+	<br>
+	Throwing Dagger +5<br>
+	X XX 00 01 0C 5A XD 28 00 00 00 32 00 32 00 05 00 01 00 00<br>
+	<br>
+	############################<br>
+	*****SHIELD*****<br>
+	############################<br>
+	<br>
+	Wooden Shield (AC +2)<br>
+	XX XX 00 25 01 E5 XB 08 00 aa bb bb cc cc 00 dd ee ee ff ff<br>	
+	aa - charges/extra effect time; FF - infinite / 8 bits<br>
+	bbbb - weight / 16 bits<br>
+	cccc - size / 16 bits<br>
+	dd - AC / 8 bits<br>
+	eeee - extra effect; FF FF - none / 16 bits<br>
+	ffff - extra effect value / 16 bits (−32,767, +32,767)<br>
+	<br>
+	Wooden Shield (AC +2)<br>
+	X XX 00 25 01 E5 XB 08 00 00 00 FA 00 AF 00 02 FF FF 00 00<br>
+	<br>
+	Tower Shield (AC +3)<br>
+	X XX 00 72 01 75 XF 08 00 00 01 2C 00 C8 00 03 FF FF 00 00<br>
+	<br>
+	Raven Shield (AC +5, Feather falling)<br>
+	X XX 00 71 05 75 XB 08 00 FF 01 5E 00 FA 00 05 00 1C 00 00<br>
+	<br>
+	Displacer Shield (AC +6, Shield +2)<br>
+	X XX 00 6F 06 49 XB 08 00 C8 01 5E 00 FA 00 06 00 14 00 02<br>
+	<br>
+	Figurine of Deflection (AC +5, Magic Shield(5) +20)<br>
+	X XX 00 A3 06 8A X4 08 00 FE 00 28 00 28 00 05 00 05 00 14<br>
+	<br>
+	Tower Shield +1 (AC +4)<br>
+	X XX 00 72 07 ED XF 08 00 00 01 2C 00 C8 00 04 FF FF 00 00<br>
+	<br>
+	Shield of Protection +2 (AC +8, Shield +2)<br>
+	X XX 00 6B 09 07 XB 08 00 FA 01 5E 00 FA 00 08 00 14 00 02<br>
+	<br>
+	Storm Shield (AC +6, Fire Attack Protection)<br>
+	X XX 00 6D 09 2A XB 08 00 FF 01 5E 00 FA 00 06 00 20 00 00<br>
+	<br>
+	Holy Symbol (AC +2, Magic Shield(21) +2)<br>
+	X XX 00 28 09 E7 X2 08 00 FA 00 32 00 4B 00 02 00 15 00 02<br>
+	<br>
+	Night Shield (AC +6, Possesion Protection)<br>
+	X XX 00 6E 0B 2E XB 08 00 FF 01 13 00 C8 00 06 00 21 00 00<br>
+	<br>
+	Holy Shield (AC +7, Magic Shield(5) +15)<br>
+	X XX 00 6C 0B 6F XB 08 00 FF 01 5E 00 FA 00 07 00 05 00 0F<br>
+	<br>
+	God Shield (AC +10, Strength +10)<br>
+	X XX 00 72 0E 0A XF 08 00 C8 01 2C 00 C8 00 0A 00 00 00 0A<br>
+	<br>
+	############################<br>
+	*****HELM*****<br>
+	############################<br>
+	<br>
+	Helmet (AC +3)<br>
+	X XX 00 24 00 A3 XB 07 00 aa bb bb cc cc 00 dd ee ee ff ff<br>
+	aa - charges/extra effect time; FF - infinite / 8 bits<br>
+	bbbb - weight / 16 bits<br>
+	cccc - size / 16 bits<br>
+	dd - AC / 8 bits<br>
+	eeee - extra effect; FF FF - none / 16 bits<br>
+	ffff - extra effect value / 16 bits (−32,767, +32,767)<br>
+	<br>
+	Helmet (AC +3)<br>
+	X XX 00 24 00 A3 XB 07 00 00 00 E1 00 A0 00 03 FF FF 00 00<br>
+	X XX 00 7D 07 E5 XB 07 00 00 00 E1 00 A0 00 03 FF FF 00 00<br>
+	<br>
+	Helm (AC +3)<br>
+	X XX 00 24 04 CF XB 07 00 00 00 E1 00 A0 00 03 FF FF 00 00<br>
+	<br>
+	Mage Bane (AC +3, Magic Shield(5) +25)<br>
+	X XX 00 7C 06 37 X1 07 00 FE 00 E1 00 A0 00 03 00 05 00 19<br>
+	<br>
+	Helm of the Triton (AC +3, Water Brething)<br>
+	X XX 00 7B 06 A1 XF 07 00 FF 00 E1 00 A0 00 03 00 18 00 00<br>
+	<br>
+	Knighthelm (AC +5, Magic Shield(5) +15)<br>
+	X XX 00 7D 08 E1 XB 07 00 DC 00 E1 00 A0 00 05 00 05 00 0F<br>
+	<br>
+	Helm of Brilliance (AC +7, Intelligence +5)<br>
+	X XX 00 7C 0D EA X4 07 00 FF 00 E1 00 A0 00 07 00 02 00 05<br>
+	<br>
+	############################<br>
+	*****ARMOR******<br>
+	############################<br>
+	<br>
+	Leather Armor (AC +3)<br>
+	X XX 00 22 00 7D XF 09 00 aa bb bb cc cc 00 dd ee ee ff ff<br>
+	aa - charges/extra effect time; FF - infinite / 8 bits<br>
+	bbbb - weight / 16 bits<br>
+	cccc - size / 16 bits<br>
+	dd - AC / 8 bits<br>
+	eeee - extra effect; FF FF - none / 16 bits<br>
+	ffff - extra effect value / 16 bits (−32,767, +32,767)<br>
+	<br>
+	Leather Armor (AC +3)<br>
+	X XX 00 22 00 7D XF 09 00 00 01 2C 01 2C 00 03 FF FF 00 00<br>
+	<br>
+	Chain Mail Armor (AC +5)<br>
+	X XX 00 26 02 AA XB 09 00 00 02 58 00 FA 00 05 FF FF 00 00<br>
+	<br>
+	Ring Armor (AC +4)<br>
+	X XX 00 97 04 95 XB 09 00 00 02 58 00 FA 00 04 FF FF 00 00<br>
+	<br>
+	Plate Armor (AC +7)<br>
+	X XX 00 95 05 2B X3 09 00 00 02 EE 01 5E 00 07 FF FF 00 00<br>
+	<br>
+	Robe of the Forest (AC +6, Magic Shield(5) +20)<br>
+	X XX 00 C2 05 49 X8 09 00 F5 00 32 00 4B 00 06 00 05 00 14<br>
+	<br>
+	Leather Armor +2 (AC +5)<br>
+	X XX 00 22 05 8B XF 09 00 00 01 2C 01 2C 00 05 FF FF 00 00<br>
+	<br>
+	Robes of Sundar (AC +4, Magic Shield(5) +15)<br>
+	X XX 00 A6 06 7A X4 09 00 FF 00 32 00 4B 00 04 00 05 00 0F<br>
+	<br>
+	Chain Mail Armor +1 (AC +6)<br>
+	X XX 00 26 07 9D XB 09 00 00 02 58 00 FA 00 06 FF FF 00 00<br>
+	<br>
+	Robes of the Elders (AC +9, Magic Shield(5) +15)<br>
+	X XX 00 A7 09 6A X4 09 00 FF 00 32 00 4B 00 09 00 05 00 0F<br>
+	<br>
+	Ice Mail (AC +8, Fire Attack Protection)<br>
+	X XX 00 99 09 D0 XB 09 00 FA 01 90 00 FA 00 08 00 20 00 00<br>
+	<br>
+	Shadow Mail (AC +9, Magic Shield(5) +15)<br>
+	X XX 00 9B 0A 5C X4 09 00 FF 01 13 00 FA 00 09 00 05 00 0F<br>
+	<br>
+	Blackjack (AC +9, Poison Protection)<br>
+	X XX 00 9D 0B 8D X1 09 00 FF 01 C2 00 FA 00 09 00 1D 00 00<br>
+	<br>
+	Leather Armor +3 (AC +6)<br>
+	X XX 00 22 0C 6D XF 09 00 00 01 2C 01 2C 00 06 FF FF 00 00<br>
+	<br>
+	Dragon Bane (AC +10, Cold Attack Protection)<br>
+	X XX 00 9C 0C A4 XB 09 00 FA 01 C2 00 FA 00 0A 00 1F 00 00<br>
+	<br>
+	Plate Mail+3 (AC +10)<br>
+	X XX 00 95 0C C1 X3 09 00 00 02 EE 01 5E 00 0A FF FF 00 00<br>
+	<br>
+	Dragon King Armor (AC +15, Magic Shield(5) +100)<br>
+	X XX 00 9C 0D BA XF 09 00 FA 01 C2 00 FA 00 0F 00 05 00 64<br>
+	<br>
+	Plate Armor +3 (AC +10)<br>
+	X XX 00 95 80 10 X1 09 00 00 02 EE 01 5E 00 0A FF FF 00 00<br>
+	<br>
+	############################<br>
+	*****LEGGINGS*****<br>
+	############################<br>
+	<br>
+	Chain Leggins (AC +2)<br>
+	X XX 00 27 01 4A XB 0A 00 aa bb bb cc cc 00 dd ee ee ff ff<br>
+	aa - charges/extra effect time; FF - infinite / 8 bits<br>
+	bbbb - weight / 16 bits<br>
+	cccc - size / 16 bits<br>
+	dd - AC / 8 bits<br>
+	eeee - extra effect; FF FF - none / 16 bits<br>
+	ffff - extra effect value / 16 bits (−32,767, +32,767)<br>
+	<br>
+	Chain Leggins (AC +2)<br>
+	X XX 00 27 01 4A XB 0A 00 00 00 4B 00 64 00 02 FF FF 00 00<br>
+	<br>
+	Plate Leggings (AC +3)<br>
+	X XX 00 96 01 B5 X3 0A 00 00 00 7D 00 A0 00 03 FF FF 00 00<br>
+	<br>
+	Leather Leggings (AC +1)<br>
+	X XX 00 23 02 30 XF 0A 00 00 00 64 00 A0 00 01 FF FF 00 00<br>
+	<br>
+	Leather Leggings +1 (AC +2)<br>
+	X XX 00 23 03 41 XF 0A 00 00 00 64 00 A0 00 02 FF FF 00 00<br>
+	<br>
+	Ring Leggings (Ac +2)<br>
+	X XX 00 98 03 9C XB 0A 00 00 00 4B 00 64 00 02 FF FF 00 00<br>
+	<br>
+	Chain Mail Leggings +1 (AC +3)<br>
+	X XX 00 27 07 B1 XB 0A 00 00 00 4B 00 64 00 03 FF FF 00 00<br>
+	<br>
+	Plate Leggings +1 (AC +4)<br>
+	X XX 00 96 0C 7E X3 0A 00 00 00 7D 00 A0 00 04 FF FF 00 00<br>
+	<br>
+	############################<br>
+	*****BOOTS*****<br>
+	############################<br>
+	<br>
+	Leather Boots (AC +1)<br>
+	X XX 00 29 04 02 XF 0B 00 aa bb bb cc cc 00 dd ee ee ff ff<br>
+	aa - charges/extra effect time; FF - infinite / 8 bits<br>
+	bbbb - weight / 16 bits<br>
+	cccc - size / 16 bits<br>
+	dd - AC / 8 bits<br>
+	eeee - extra effect; FF FF - none / 16 bits<br>
+	ffff - extra effect value / 16 bits (−32,767, +32,767)<br>
+	<br>
+	Leather Boots (AC +1)<br>
+	X XX 00 29 04 02 XF 0B 00 00 01 90 00 AF 00 01 FF FF 00 00<br>
+	<br>
+	Plate Boots (AC +3)<br>
+	X XX 00 69 06 2B X3 0B 00 00 00 96 00 96 00 03 FF FF 00 00<br>
+	<br>
+	Lyteboots (AC +2, Feather falling)<br>
+	X XX 00 67 0B 58 XF 0B 00 FF 01 90 00 AF 00 02 00 1C 00 00<br>
+	<br>
+	Elven Boots (AC +2, Feather falling)<br>
+	X XX 00 67 0D 0D XF 0B 00 FF 01 90 00 AF 00 02 00 1C 00 00<br>
+	<br>
+	Boots of Stealth (AC +1, Dexterity +2)<br>
+	X XX 00 68 0D 41 XF 0B 00 FF 01 90 00 AF 00 00 00 04 00 02<br>
+	<br>
+	############################<br>
+	*****BRACERS/GAUNTLETS*****<br>
+	############################<br>
+	<br>
+	Gauntlets (AC +1)<br>
+	X XX 00 77 00 22 XF 2A 00 aa bb bb cc cc 00 dd ee ee ff ff<br>
+	aa - charges/extra effect time; FF - infinite / 8 bits<br>
+	bbbb - weight / 16 bits<br>
+	cccc - size / 16 bits<br>
+	dd - AC / 8 bits<br>
+	eeee - extra effect; FF FF - none / 16 bits<br>
+	ffff - extra effect value / 16 bits (−32,767, +32,767)<br>
+	<br>
+	Gauntlets (AC +1)<br>
+	X XX 00 77 00 22 XF 2A 00 00 00 3C 00 4B 00 01 FF FF 00 00 (standard gauntlets)<br>
+	<br>
+	Gauntlets (AC +2)<br>
+	X XX 00 77 00 22 XF 2A 00 00 00 3C 00 4B 00 02 FF FF 00 00 (used once in game)<br>
+	<br>
+	Gauntlets of the Titans (AC +1, Strength +1)<br>
+	X XX 00 76 01 C4 XB 2A 00 FF 00 5A 00 64 00 01 00 00 00 01<br>
+	<br>
+	Bracers of Protection (AC +1)<br>
+	X XX 00 78 02 81 XF 2A 00 FF 00 1E 00 41 00 01 FF FF 00 00<br>
+	<br>
+	Bracers of Agility (AC +1, Dexterity +2)<br>
+	X XX 00 7A 04 BC XF 2A 00 FF 00 1E 00 4B 00 00 00 04 00 02<br>
+	<br>
+	Gauntlets of Dexterity (AC +1, Dexterity +2)<br>
+	X XX 00 75 07 54 XF 2A 00 FF 00 3C 00 4B 00 00 00 04 00 02<br>
+	<br>
+	Gauntlets of Temin (AC +2, Temin Protection)<br>
+	X XX 00 A9 07 8A X2 2A 00 00 00 5A 00 64 00 02 FF FF 00 00<br>
+	<br>
+	Bracers of Might (AC +1, Strength +1)<br>
+	X XX 00 79 08 4D XF 2A 00 FF 00 1E 00 41 00 01 00 00 00 01<br>
+	<br>
+	############################<br>
+	*****SHIRT/PANTS*****<br>
+	############################<br>
+	<br>
+	Brown Pants (AC +1)<br>
+	X XX 00 31 03 35 XF 1C 00 aa bb bb cc cc 00 dd ee ee ff ff<br>
+	aa - charges/extra effect time; FF - infinite / 8 bits<br>
+	bbbb - weight / 16 bits<br>
+	cccc - size / 16 bits<br>
+	dd - AC / 8 bits<br>
+	eeee - extra effect; FF FF - none / 16 bits<br>
+	ffff - extra effect value / 16 bits (−32,767, +32,767)<br>
+	<br>
+	Brown Pants (AC +1)<br>
+	X XX 00 31 03 35 XF 1C 00 00 00 4B 00 55 00 01 FF FF 00 00<br>
+	<br>
+	Yellow Shirt (AC +1)<br>
+	X XX 00 2E 07 D8 XF 1B 00 00 00 32 00 4B 00 01 FF FF 00 00<br>
+	<br>
+	Brown Shirt (AC +1)<br>
+	X XX 00 2C 08 07 XF 1B 00 00 00 32 00 4B 00 01 FF FF 00 00<br>
+	<br>
+	Yellow Pants (AC +1)<br>
+	X XX 00 33 08 40 XF 1C 00 00 00 4B 00 55 00 01 FF FF 00 00<br>
+	<br>
+	Pants (AC +1, Yellow)<br>
+	X XX 00 33 80 01 XF 1C 00 00 00 32 00 4B 00 01 FF FF 00 00<br>
+	<br>
+	Pants (AC +1, White)<br>
+	X XX 00 30 80 01 XF 1C 00 00 00 32 00 4B 00 01 FF FF 00 00<br>
+	<br>
+	Pants (AC +1, Red)<br>
+	X XX 00 2F 80 01 XF 1C 00 00 00 32 00 4B 00 01 FF FF 00 00<br>
+	<br>
+	Pants (AC +1, Brown)<br>
+	X XX 00 31 80 01 XF 1C 00 00 00 32 00 4B 00 01 FF FF 00 00<br>
+	<br>
+	Shirt (AC +1, Yellow)<br>
+	X XX 00 2E 80 02 XF 1B 00 00 00 4B 00 55 00 01 FF FF 00 00<br>
+	<br>
+	Shirt (AC +1, White)<br>
+	X XX 00 2B 80 02 XF 1B 00 00 00 4B 00 55 00 01 FF FF 00 00<br>
+	<br>
+	Shirt (AC +1, Red)<br>
+	X XX 00 2A 80 02 XF 1B 00 00 00 4B 00 55 00 01 FF FF 00 00<br>
+	<br>
+	Shirt (AC +1, Brown)<br>
+	X XX 00 2C 80 02 XF 1B 00 00 00 4B 00 55 00 01 FF FF 00 00<br>
+	<br>
+	############################<br>
+	*****RING*****<br>
+	############################<br>
+	<br>
+	Ring of Protection (AC +1)<br>
+	X XX 00 57 01 04 XF 15 00 aa bb bb cc cc 00 dd ee ee ff ff<br>
+	aa - charges/extra effect time; FF - infinite / 8 bits<br>
+	bbbb - weight / 16 bits<br>
+	cccc - size / 16 bits<br>
+	dd - AC / 8 bits<br>
+	eeee - extra effect; FF FF - none / 16 bits<br>
+	ffff - extra effect value / 16 bits (−32,767, +32,767)<br>
+	<br>
+	Ring of Protection (AC +1)<br>
+	X XX 00 57 01 04 XF 15 00 FF 00 05 00 0A 00 01 FF FF 00 00<br>
+	<br>
+	Ring of Location (AC +1, Wizard Sight)<br>
+	X XX 00 55 04 AB XF 15 00 64 00 05 00 0A 00 01 00 17 00 00<br>
+	<br>
+	Ring of Location (Wizard Sight)<br>
+	X XX 00 55 04 AB XF 15 00 FF 00 05 00 0A 00 00 00 17 00 00<br>
+	<br>
+	Ring of Protection +2 (AC +2)<br>
+	X XX 00 57 05 EA XF 15 00 FF 00 05 00 0A 00 02 FF FF 00 00<br>
+	<br>
+	Ring of Air Elemental (Feather falling)<br>
+	X XX 00 34 06 00 XF 15 00 FF 00 05 00 0A 00 00 00 1C 00 00<br>
+	<br>
+	Ring of Health (Disease Protection)<br>
+	X XX 00 56 07 21 XF 15 00 FF 00 05 00 0A 00 00 00 1A 00 00<br>
+	<br>
+	Ring of Water Breathing (Water Breathing)<br>
+	X XX 00 54 08 AF XF 15 00 FA 00 05 00 0A 00 00 00 18 00 00<br>
+	<br>
+	Ring of Magic Resistance (Magic Shield(5) +30)<br>
+	X XX 00 58 0A 1C XF 15 00 FA 00 05 00 0A 00 00 00 05 00 1E<br>
+	<br>
+	Ring of Magic Resistance (Magic Shield(5) +15)<br>
+	X XX 00 58 0A 1C XF 15 00 FF 00 05 00 0A 00 00 00 05 00 0F<br>
+	<br>
+	Ring of Demajen (AC +1, Invincibility)<br>
+	X XX 00 55 0C FD XF 15 00 32 00 05 00 0A 00 01 00 1E 00 00<br>
+	<br>
+	Ring of Intelligence (Intelligence +3)<br>
+	X XX 00 55 80 0D X4 15 00 FF 00 05 00 0A 00 00 00 02 00 03<br>
+	<br>
+	Ring of Protection +3 (AC +3, Wisdom +2)<br>
+	X XX 00 57 80 0E X2 15 00 FF 00 05 00 0A 00 03 00 01 00 02<br>
+	<br>
+	############################<br>
+	*****CROWN/MASK*****<br>
+	############################<br>
+	<br>
+	Crown of Detection (Detect Traps)<br>
+	X XX 00 5F 02 97 XF 2D 00 aa bb bb cc cc 00 dd ee ee ff ff<br>
+	aa - charges/extra effect time; FF - infinite / 8 bits<br>
+	bbbb - weight / 16 bits<br>
+	cccc - size / 16 bits<br>
+	dd - AC / 8 bits<br>
+	eeee - extra effect; FF FF - none / 16 bits<br>
+	ffff - extra effect value / 16 bits (−32,767, +32,767)<br>
+	<br>
+	Crown of Detection (Detect Traps)<br>
+	X XX 00 5F 02 97 XF 2D 00 FA 00 C8 00 69 00 00 00 16 00 02<br>
+	<br>
+	Crown of Wisdom (Wistom +2)<br>
+	X XX 00 5F 02 D1 XF 2D 00 FF 00 C8 00 69 00 00 00 01 00 02<br>
+	<br>
+	Crown of Stone (Gaze Protection)<br>
+	X XX 00 5E 09 7E XF 2D 00 FF 00 C8 00 69 00 00 00 19 00 00<br>
+	<br>
+	Crown of Lionheart (AC +1, only decrease melee weapon hit freqiency?)<br>
+	X XX 00 60 0A D5 XF 2D 00 FF 00 C8 00 69 00 01 00 08 00 02<br>
+	<br>
+	Crown of Serpent (AC +1, Poison Protection)<br>
+	X XX 00 61 0B E8 XF 2D 00 FF 00 C8 00 69 00 01 00 1D 00 01<br>
+	<br>
+	Mask of True Sight<br>
+	X XX 00 C0 03 22 X4 2D 00 00 00 00 00 00 00 00 FF FF 00 00<br>
+	<br>
+	############################<br>
+	*****AMULET*****<br>
+	############################<br>
+	<br>
+	Amulet of Comprehension (Read Rune Gain)<br>
+	X XX 00 5C 03 55 XF 1A 00 aa bb bb cc cc 00 dd ee ee ff ff<br>
+	aa - charges/extra effect time; FF - infinite / 8 bits<br>
+	bbbb - weight / 16 bits<br>
+	cccc - size / 16 bits<br>
+	dd - AC / 8 bits<br>
+	eeee - extra effect; FF FF - none / 16 bits<br>
+	ffff - extra effect value / 16 bits (−32,767, +32,767)<br>
+	<br>
+	Amulet of Comprehension (Read Rune Gain)<br>
+	X XX 00 5C 03 55 XF 1A 00 FF 00 14 00 19 00 00 00 1B 00 00<br>
+	<br>
+	Amulet of Protection (AC +2)<br>
+	X XX 00 1D 03 CF XF 1A 00 FF 00 14 00 19 00 02 FF FF 00 00<br>
+	<br>
+	Amulet of Piety (Spell Level +2)<br>
+	X XX 00 5A 06 F4 X2 1A 00 FF 00 14 00 19 00 00 00 06 00 02<br>
+	<br>
+	Guardian (Possesion Protection)<br>
+	X XX 00 5D 09 B9 XF 1A 00 FF 00 14 00 19 00 00 00 21 00 00<br>
+	<br>
+	Amulet of Marik (AC +2, Strength -5)<br>
+	X XX 00 1D 0A F1 XF 1A 00 FF 00 14 00 19 00 02 00 00 FF FB<br>
+	<br>
+	Amulet of Power (AC +2, Strength +4)<br>
+	X XX 00 5B 0B D0 XF 1A 00 FF 00 14 00 19 00 02 00 00 00 04<br>
+	<br>
+	############################<br>
+	*****BELT*****<br>
+	############################<br>
+	<br>
+	Belt (AC +1)<br>
+	X XX 00 0F 00 2C XF 19 00 aa bb bb cc cc 00 dd ee ee ff ff<br>
+	aa - charges/extra effect time; FF - infinite / 8 bits<br>
+	bbbb - weight / 16 bits<br>
+	cccc - size / 16 bits<br>
+	dd - AC / 8 bits<br>
+	eeee - extra effect; FF FF - none / 16 bits<br>
+	ffff - extra effect value / 16 bits (−32,767, +32,767)<br>
+	<br>
+	Belt (AC +1)<br>
+	X XX 00 0F 00 2C XF 19 00 00 00 96 00 4B 00 01 FF FF 00 00<br>
+	<br>
+	Belt of Strength (Strength +1)<br>
+	X XX 00 10 04 72 XF 19 00 FF 00 96 00 4B 00 00 00 00 00 01<br>
+	<br>
+	Belt of Might (Strength +4)<br>
+	X XX 00 10 0A 8E XF 19 00 FF 00 96 00 4B 00 00 00 00 00 04<br>
+	<br>
+	Belt of the Troll (AC +2, HP Regeneration)<br>
+	X XX 00 65 0B 7B XF 19 00 FA 00 96 00 4B 00 02 00 09 00 01<br>
+	<br>
+	Belt of Sustenance (AC +1, Unknown special:50 value:65535 charges/time:infinite)<br>
+	X XX 00 66 0B BD XF 19 00 FF 00 96 00 4B 00 01 00 32 FF FF<br>
+	<br>
+	############################<br>
+	*****SPELLCASTER*****<br>
+	############################<br>
+	<br>
+	Storm Wand (Stone Fire)<br>
+	X XX 00 7F 02 55 XF 29 00 aa bb bb cc cc 00 dd 00 ee 00 00<br>
+	aa - charges/extra effect time; FF - infinite / 8 bits<br>
+	bbbb - weight / 16 bits<br>
+	cccc - size / 16 bits<br>
+	dd - ? / 8 bits?<br>
+	ee - spell / 8 bits<br>
+	<br>
+	Storm Wand (Stone Fire)<br>
+	X XX 00 7F 02 55 XF 29 00 05 00 19 00 23 00 00 00 85 00 00<br>
+	<br>
+	Wound Healer (Healing)<br>
+	X XX 00 81 02 E1 X6 29 00 07 00 19 00 23 00 00 00 84 00 00<br>
+	<br>
+	Wand of Dispelling (Dispelling)<br>
+	X XX 00 7E 03 01 XF 29 00 06 00 19 00 23 00 00 00 81 00 00<br>
+	<br>
+	Horn of Plenty (Sustenance)<br>
+	X XX 00 11 04 E0 XF 29 00 05 00 3C 00 4B 00 00 00 8A 00 00<br>
+	<br>
+	Fire Wand (Stone Fire)<br>
+	X XX 00 80 04 EF XF 29 00 0A 00 19 00 23 00 00 00 85 00 00<br>
+	<br>
+	Black Horn (Fireball)<br>
+	X XX 00 74 06 C0 XF 29 00 0A 00 3C 00 4B 00 00 00 83 00 00<br>
+	<br>
+	Rod of Chaos (Random Spell)<br>
+	X XX 00 83 09 5D XF 29 00 0C 00 1E 00 32 00 00 00 95 00 00<br>
+	<br>
+	Dark Staff (Fireball)<br>
+	X XX 00 91 09 9C X4 29 00 0A 00 4B 00 7D 00 00 00 83 00 00<br>
+	<br>
+	Horn of Destruction (Quake)<br>
+	X XX 00 73 0A 48 XF 29 00 08 00 3C 00 4B 00 00 00 89 00 00<br>
+	<br>
+	Gore Skull (Random Spells)<br>
+	X XX 00 AC 0A BE XF 29 00 0A 00 C8 00 A0 00 00 00 95 00 00<br>
+	<br>
+	Symbol of Plague (Pestilence)<br>
+	X XX 00 08 0B 9D X8 29 00 06 00 32 00 41 00 00 00 82 00 00<br>
+	<br>
+	Frost Wand (Freeze)<br>
+	X XX 00 81 0C 2F XF 29 00 0F 00 19 00 23 00 00 00 88 00 00<br>
+	<br>
+	Dragon Rod (Fireball)<br>
+	X XX 00 82 0C 3A XF 29 00 05 00 1E 00 32 00 00 00 83 00 00<br>
+	<br>
+	Rod of Resurrection (Resurrection)<br>
+	X XX 00 84 0C 90 XF 29 00 09 00 1E 00 32 00 00 00 8B 00 00<br>
+	<br>
+	Mirror Shield (Kill Medusa)<br>
+	X XX 00 70 0C DC XF 29 00 FF 01 5E 00 FA 00 00 00 8C 00 00<br>
+	<br>
+	Orb of Life (Resurrection)<br>
+	X XX 00 E7 0D 2D XF 29 00 06 00 64 00 4B 00 00 00 8B 00 00<br>
+	<br>
+	Symbol of Piety (Pestilence)<br>
+	X XX 00 28 0E 15 X2 29 00 FA 00 32 00 4B 00 00 00 82 00 00<br>
+	<br>
+	Wand of Estoroth (Random Spell)<br>
+	X XX 00 7E 0D CD XF 29 00 FA 00 19 00 23 00 00 00 95 00 00<br>
+	<br>
+	Smite Staff (Quake)<br>
+	X XX 00 92 0D DE XF 29 00 FA 00 4B 00 7D 00 00 00 89 00 00<br>
+	<br>
+	Soulfreezer (Artefact)<br>
+	X XX 00 BB 0A C9 X4 29 00 FF 00 00 00 00 00 05 00 8E 00 00<br>
+	<br>
+	Protector (Artefact)<br>
+	X XX 00 E5 0C 50 X8 29 00 FF 00 C8 00 7D 00 00 00 8D 00 00<br>
+	<br>
+	############################<br>
+	*****SPELL SCROLL*****<br>
+	############################<br>
+	<br>
+	Scroll of Life<br>
+	X XX 00 0D 00 31 XF 04 00 00 aa aa bb bb cc cc cc cc 00 dd<br>
+	aaaa - weight / 16 bits<br>
+	bbbb - size / 16 bits<br>
+	cccccccc - spell type and charges bit flag / 32 bits<br>
+	dd - spell level / 8 bits<br>
+	<br>
+	Scroll of Life<br>
+	X XX 00 0D 00 31 XF 04 00 00 00 C8 00 64 00 08 00 00 00 0A<br>
+	X XX 00 0D 00 31 XF 04 00 00 00 C8 00 64 00 18 00 00 00 0A<br>
+	X XX 00 0D 00 31 XF 04 00 00 00 C8 00 64 00 38 00 00 00 0A<br>
+	<br>
+	Scroll of Remove Trap<br>
+	X XX 00 0D 00 40 XF 04 00 00 00 C8 00 64 00 00 00 10 00 0A<br>
+	X XX 00 0D 00 40 XF 04 00 00 00 C8 00 64 00 00 00 30 00 0A<br>
+	X XX 00 0D 00 40 XF 04 00 00 00 C8 00 64 00 00 00 70 00 0A<br>
+	<br>
+	Glyph Scroll<br>
+	X XX 00 0D 03 AA XF 04 00 00 00 C8 00 64 00 40 00 00 00 0A<br>
+	X XX 00 0D 00 8B XF 04 00 00 00 C8 00 64 00 C0 00 00 00 0A<br>
+	X XX 00 0D 00 8B XF 04 00 00 00 C8 00 64 01 C0 00 00 00 0A<br>
+	<br>
+	Scroll of Dispelling<br>
+	X XX 00 0D 01 35 XF 04 00 00 00 C8 00 64 00 01 00 00 00 0A<br>
+	X XX 00 0D 01 35 XF 04 00 00 00 C8 00 64 00 03 00 00 00 0A<br>
+	X XX 00 0D 01 35 XF 04 00 00 00 C8 00 64 00 07 00 00 00 0A<br>
+	<br>
+	Quake Scroll<br>
+	X XX 00 0D 02 13 XF 04 00 00 00 C8 00 64 00 00 00 08 00 0A<br>
+	<br>
+	Teleport Scroll<br>
+	X XX 00 0D 02 60 XF 04 00 00 00 C8 00 64 00 00 20 00 00 0A<br>
+	X XX 00 0D 02 60 XF 04 00 00 00 C8 00 64 00 00 60 00 00 0A<br>
+	<br>
+	Scroll of Cure Poison<br>
+	X XX 00 0D 02 BB XF 04 00 00 00 C8 00 64 00 00 00 01 00 0A<br>
+	X XX 00 0D 02 BB XF 04 00 00 00 C8 00 64 00 00 00 03 00 0A<br>
+	X XX 00 0D 02 BB XF 04 00 00 00 C8 00 64 00 00 00 07 00 0A<br>
+	<br>
+	Scroll of Healing<br>
+	X XX 00 0D 04 83 XF 04 00 00 00 C8 00 64 08 00 00 00 00 0A<br>
+	X XX 00 0D 04 83 XF 04 00 00 00 C8 00 64 0A 00 00 00 00 0A<br>
+	X XX 00 0D 04 83 XF 04 00 00 00 C8 00 64 0E 00 00 00 00 0A<br>
+	<br>
+	Scroll of Detection<br>
+	X XX 00 0D 06 5F XF 04 00 00 00 C8 00 64 10 00 00 00 00 0A<br>
+	X XX 00 0D 06 5F XF 04 00 00 00 C8 00 64 30 00 00 00 00 0A<br>
+	X XX 00 0D 06 5F XF 04 00 00 00 C8 00 64 70 00 00 00 00 0A<br>
+	<br>
+	Stone to Flesh Scroll<br>
+	X XX 00 0D 08 99 XF 04 00 00 00 C8 00 64 00 00 00 80 00 0A<br>
+	X XX 00 0D 08 99 XF 04 00 00 00 C8 00 64 00 00 01 80 00 0A<br>
+	X XX 00 0D 08 99 XF 04 00 00 00 C8 00 64 00 00 03 80 00 0A<br>
+	<br>
+	Possesion Scroll<br>
+	X XX 00 0D 09 A7 XF 04 00 00 00 C8 00 64 00 00 04 00 00 0A<br>
+	X XX 00 0D 09 A7 XF 04 00 00 00 C8 00 64 00 00 14 00 00 0A<br>
+	X XX 00 0D 09 A7 XF 04 00 00 00 C8 00 64 00 00 1C 00 00 0A<br>
+	<br>
+	############################<br>
+	*****SCROLL*****<br>
+	############################<br>
+	<br>
+	Scroll<br>
+	X XX 00 0E 04 55 XF 18 00 00 aa aa bb bb 00 cc 00 dd 00 00<br>
+	aaaa - weight / 16 bits<br>
+	bbbb - size / 16 bits<br>
+	cc - text number (from bcdft file) / 8 bits<br>
+	dd - scroll type; 00 - true, 01 - false / 8 bits<br>
+	<br>
+	Scroll<br>
+	X XX 00 0E 04 55 XF 18 00 00 00 C8 00 64 00 20 00 00 00 00<br>
+	<br>
+	Old Scroll<br>
+	X XX 00 0E 00 98 XF 18 00 00 00 C8 00 64 00 10 00 01 00 00<br>
+	<br>
+	Tattered Scroll<br>
+	X XX 00 0E 02 41 XF 18 00 00 00 C8 00 64 00 01 00 00 00 00<br>
+	<br>
+	Bloody Scroll<br>
+	X XX 00 0E 04 47 XF 18 00 00 00 C8 00 64 00 12 00 01 00 00<br>
+	<br>
+	Torn Scroll<br>
+	X XX 00 0E 04 66 XF 18 00 00 00 C8 00 64 00 11 00 01 00 00<br>
+	<br>
+	Old Parchment<br>
+	X XX 00 0E 05 1D XF 18 00 00 00 C8 00 64 00 18 00 00 00 00<br>
+	<br>
+	Dusty Scroll<br>
+	X XX 00 0E 05 C4 XF 18 00 00 00 C8 00 64 00 14 00 01 00 00<br>
+	<br>
+	History of the Archdruid<br>
+	X XX 00 0E 05 D1 XF 18 00 00 00 C8 00 64 00 03 00 00 00 00<br>
+	<br>
+	Dusty Manuscript<br>
+	X XX 00 0E 06 D8 XF 18 00 00 00 C8 00 64 00 1F 00 00 00 00<br>
+	<br>
+	Manuscript<br>
+	X XX 00 0E 07 6B XF 18 00 00 00 C8 00 64 00 19 00 00 00 00<br>
+	<br>
+	Scroll of Temin<br>
+	X XX 00 0E 07 C8 XF 18 00 00 00 C8 00 64 00 04 00 00 00 00<br>
+	<br>
+	Scroll of Runetek<br>
+	X XX 00 0E 08 EC XF 18 00 00 00 C8 00 64 00 06 00 00 00 00<br>
+	<br>
+	Scroll of Oak Raven<br>
+	X XX 00 0E 09 37 XF 18 00 00 00 C8 00 64 00 09 00 00 00 00<br>
+	<br>
+	Scroll of Dvergar<br>
+	X XX 00 0E 09 4B XF 18 00 00 00 C8 00 64 00 07 00 00 00 00<br>
+	<br>
+	Scroll of Orbs<br>
+	X XX 00 0E 09 8D XF 18 00 00 00 C8 00 64 00 0F 00 00 00 00<br>
+	<br>
+	Nether Scroll<br>
+	X XX 00 0E 09 C2 XF 18 00 00 00 C8 00 64 00 0E 00 00 00 00<br>
+	<br>
+	Scroll of Kaolic<br>
+	X XX 00 0E 09 F3 XF 18 00 00 00 C8 00 64 00 08 00 00 00 00<br>
+	<br>
+	Ragged Scroll<br>
+	X XX 00 0E 0B 01 XF 18 00 00 00 C8 00 64 00 15 00 01 00 00<br>
+	<br>
+	Parchment<br>
+	X XX 00 0E 0B 0F XF 18 00 00 00 C8 00 64 00 1B 00 00 00 00<br>
+	<br>
+	Old Manuscript<br>
+	X XX 00 0E 0B 49 XF 18 00 00 00 C8 00 64 00 0C 00 00 00 00<br>
+	<br>
+	Demon Scroll<br>
+	X XX 00 0E 0B 62 XF 18 00 00 00 C8 00 64 00 0B 00 00 00 00<br>
+	<br>
+	Faded Scroll<br>
+	X XX 00 0E 0D 5B XF 18 00 00 00 C8 00 64 00 0D 00 00 00 00<br>
+	<br>
+	Singed Scroll<br>
+	X XX 00 0E 0D 68 XF 18 00 00 00 C8 00 64 00 22 00 00 00 00<br>
+	<br>
+	############################<br>
+	*****CONTAINER*****<br>
+	############################<br>
+	<br>
+	Coffer<br>
+	X XX 00 A0 00 AA XF 23 00 aa bb bb cc cc 0d dd ee ee 00 ff<br>
+	aa - specified item type can go in (item 8th byte); FE - all items/ 8 bits<br>
+	bbbb - weight / 16 bits<br>
+	cccc - size / 16 bits<br>
+	ddd - item unique number for proper item stacking; 0 00 - empty container / 12 bits<br>
+	eeee - maximum size for all items in / 16 bits<br>
+	ff - item slots * 2 / 8 bits<br>
+	<br>
+	Coffer<br>
+	X XX 00 A0 00 AA XF 23 00 FE 03 E8 02 26 0X XX 01 DB 00 03<br>
+	X XX 00 A1 00 AA XF 23 00 FE 03 E8 02 26 0X XX 01 DB 00 03<br>
+	X XX 00 9F 03 E4 XF 23 00 FE 03 E8 02 26 0X XX 01 DB 00 03<br>
+	<br>
+	Chest<br>
+	X XX 00 1A 00 FE XF 23 00 FE 13 88 05 DC 0X XX 05 78 00 06<br>
+	X XX 00 1A 00 FE XF 23 00 FE 13 88 05 DC 0X XX 05 78 00 05<br>
+	<br>
+	Holding Bag<br>
+	X XX 00 1C 01 59 XF 13 00 FE 00 64 00 1E 0X XX 01 F4 00 02<br>
+	X XX 00 1C 01 59 XF 13 00 FE 00 64 00 1E 0X XX 01 F4 00 03<br>
+	<br>
+	Bag<br>
+	X XX 00 1C 01 82 XF 13 00 FE 00 64 00 1E 0X XX 01 F4 00 02<br>
+	<br>
+	Quiver<br>
+	X XX 00 05 01 86 XF 13 00 25 00 C8 01 5E 0X XX 00 FA 00 05<br>
+	<br>
+	Backpack<br>
+	X XX 00 1B 01 DC XF 13 00 FE 01 F4 00 28 0X XX 03 07 00 04<br>
+	<br>
+	Bag of Kelson<br>
+	X XX 00 1C 02 05 XF 13 00 FE 00 64 00 5A 0X XX 03 E8 00 06<br>
+	<br>
+	Chest of Temin<br>
+	X XX 00 AA 08 31 X2 23 00 2C 13 88 75 30 0X XX 75 30 00 02<br>
+	<br>
+	Wandcoffer<br>
+	X XX 00 9F 0C 24 XF 23 00 FE 03 E8 02 26 0X XX 01 DB 00 03<br>
+	<br>
+	############################<br>
+	*****KEY*****<br>
+	############################<br>
+	<br>
+	Heart Key<br>
+	X XX 00 C9 00 ED XF 06 00 00 aa aa bb bb 00 cc 00 00 00 00<br>
+	aaaa - weight / 16 bits<br>
+	bbbb - size / 16 bits<br>
+	cc - lock number; must be that same as corresponding lock cc byte / 8 bits<br>
+	<br>
+	Heart Key<br>
+	X XX 00 C9 00 ED XF 06 00 00 00 0A 00 0F 00 06 00 00 00 00<br>
+	<br>
+	Square Key<br>
+	X XX 00 CA 01 2A XF 06 00 00 00 0A 00 0F 00 61 00 00 00 00<br>
+	<br>
+	Emerald Key<br>
+	X XX 00 C8 01 A9 XF 06 00 00 00 0A 00 0F 00 09 00 00 00 00<br>
+	<br>
+	Box Key<br>
+	X XX 00 CD 03 6D XF 06 00 00 00 00 00 00 00 06 00 00 00 00<br>
+	<br>
+	Red Key<br>
+	X XX 00 CB 03 87 xF 06 00 00 00 00 00 00 00 2B 00 00 00 00<br>
+	<br>
+	Fork Key<br>
+	X XX 00 CC 03 B8 XF 06 00 00 00 00 00 00 00 04 00 00 00 00<br>
+	<br>
+	Rectangle Key<br>
+	X XX 00 D0 05 0F XF 06 00 00 00 00 00 00 00 4D 00 00 00 00<br>
+	<br>
+	Iron Key<br>
+	X XX 00 CF 05 40 XF 06 00 00 00 00 00 00 00 05 00 00 00 00<br>
+	X XX 00 CF 05 40 XF 06 00 00 00 0A 00 0F 00 19 00 00 00 00<br>
+	<br>
+	Iron Key<br>
+	X XX 00 DA 05 40 XF 06 00 00 00 0A 00 0F 00 5C 00 00 00 00<br>
+	<br>
+	Gold Key<br>
+	X XX 00 CE 05 82 XF 06 00 00 00 0A 00 0F 00 0A 00 00 00 00<br>
+	<br>
+	Dragon Key<br>
+	X XX 00 D3 06 E9 XF 06 00 00 00 00 00 00 00 02 00 00 00 00<br>
+	<br>
+	Stronghold Key<br>
+	X XX 00 D2 07 12 XF 06 00 00 00 00 00 00 00 01 00 00 00 00<br>
+	<br>
+	Night Key<br>
+	X XX 00 D1 07 FD XF 06 00 00 00 00 00 00 00 03 00 00 00 00<br>
+	<br>
+	Nether Key<br>
+	X XX 00 D4 09 1F XF 06 00 00 00 0A 00 0F 00 21 00 00 00 00<br>
+	<br>
+	Z Key<br>
+	X XX 00 D9 0A 69 XF 06 00 00 00 0A 00 0F 00 07 00 00 00 00<br>
+	<br>
+	Possessor Key<br>
+	X XX 00 D7 0A 80 XF 06 00 00 00 0A 00 0F 00 05 00 00 00 00<br>
+	<br>
+	Darkness Key<br>
+	X XX 00 D8 0A 9C XF 06 00 00 00 0A 00 0F 00 0B 00 00 00 00<br>
+	<br>
+	Soul Key<br>
+	X XX 00 D8 0A B5 XF 06 00 00 00 0A 00 0F 00 63 00 00 00 00<br>
+	<br>
+	Octa Key<br>
+	X XX 00 D5 0A E8 XF 06 00 00 00 0A 00 0F 00 43 00 00 00 00<br>
+	<br>
+	Silver Key<br>
+	X XX 00 D5 0B 19 XF 06 00 00 00 0A 00 0F 00 2D 00 00 00 00<br>
+	<br>
+	Stone Key<br>
+	X XX 00 DB 0B 24 XF 06 00 00 00 0A 00 0F 00 2E 00 00 00 00<br>
+	<br>
+	O Key<br>
+	X XX 00 DA 0B 97 XF 06 00 00 00 0A 00 0F 00 2F 00 00 00 00<br>
+	<br>
+	Pin Key<br>
+	X XX 00 DC 0B E0 XF 06 00 00 00 0A 00 0F 00 07 00 00 00 00<br>
+	<br>
+	Gold Octa Key<br>
+	X XX 00 DF 0C 06 XF 06 00 00 00 0A 00 0F 00 3E 00 00 00 00<br>
+	<br>
+	Black Pearl Key<br>
+	X XX 00 DD 0C 14 XF 06 00 00 00 0A 00 0F 00 0A 00 00 00 00<br>
+	<br>
+	White Pearl Key<br>
+	X XX 00 DE 0C B1 XF 06 00 00 00 0A 00 0F 00 58 00 00 00 00<br>
+	<br>
+	Greengold Key<br>
+	X XX 00 E2 0C CE XF 06 00 00 00 0A 00 0F 00 03 00 00 00 00<br>
+	<br>
+	Mirror Key<br>
+	X XX 00 E0 0D 19 XF 06 00 00 00 0A 00 0F 00 01 00 00 00 00<br>
+	<br>
+	Eye Key<br>
+	X XX 00 E1 0D 39 XF 06 00 00 00 0A 00 0F 00 04 00 00 00 00<br>
+	<br>
+	Ruby Key<br>
+	X XX 00 E3 0D 52 XF 06 00 00 00 0A 00 0F 00 05 00 00 00 00<br>
+	<br>
+	############################<br>
+	*****TABLET*****<br>
+	############################<br>
+	<br>
+	Tablet of Runetek (Strength +1)<br>
+	X XX 00 E9 00 10 X1 30 00 aa bb bb cc cc 00 dd 00 ee ff ff<br>
+	aa - who can read tablet; 00 - Fighter; 01 - Cleric, 02 - Magic User, 03 - Druid / 8 bits<br>
+	bbbb - weight / 16 bits<br>
+	cccc - size / 16 bits<br>
+	dd - text number (from bcdft file); displayed when used / 8 bits<br>
+	ee - effect / 8 bits<br>
+	ffff - effect value / 16 bits (−32,767, +32,767)<br>
+	<br>
+	Tablet of Runetek (Strength +1)<br>
+	X XX 00 E9 00 10 X1 30 00 00 00 96 00 C8 00 01 00 00 00 01<br>
+	<br>
+	Tablet of Runetek (Constitution +1)<br>
+	X XX 00 E9 00 10 X1 30 00 00 00 96 00 C8 00 05 00 03 00 01<br>
+	<br>
+	Tablet of Runetek (Gain Level)<br>
+	X XX 00 E9 00 10 X1 30 00 00 00 96 00 C8 00 06 00 05 00 01<br>
+	<br>
+	Tablet of Runetek (HP +10)<br>
+	X XX 00 E9 00 10 X1 30 00 00 00 96 00 C8 00 07 00 06 00 0A<br>
+	<br>
+	Tablet of Runetek (Healing)<br>
+	X XX 00 E9 00 10 X1 30 00 00 00 96 00 C8 00 08 00 07 00 C8<br>
+	<br>
+	Tablet of Runetek (Sustenance)<br>
+	X XX 00 E9 00 10 X1 30 00 00 00 96 00 C8 00 09 00 08 00 64<br>
+	<br>
+	Tablet of Runetek (Plate Armor +3)<br>
+	X XX 00 E9 00 10 X1 30 00 00 00 96 00 C8 00 0B 00 0D 00 01<br>
+	<br>
+	Tablet of Dvergar (Inteligence +1)<br>
+	X XX 00 32 03 75 X4 30 00 02 00 96 00 C8 00 02 00 02 00 01<br>
+	<br>
+	Tablet of Dvergar (Constitution +1)<br>
+	X XX 00 32 03 75 X4 30 00 02 00 96 00 C8 00 05 00 03 00 01<br>
+	<br>
+	Tablet of Dvergar (Gain Level)<br>
+	X XX 00 32 03 75 X4 30 00 02 00 96 00 C8 00 06 00 05 00 01<br>
+	<br>
+	Tablet of Dvergar (HP +10)<br>
+	X XX 00 32 03 75 X4 30 00 02 00 96 00 C8 00 07 00 06 00 0A<br>
+	<br>
+	Tablet of Dvergar (Healing)<br>
+	X XX 00 32 03 75 X4 30 00 02 00 96 00 C8 00 08 00 07 00 C8<br>
+	<br>
+	Tablet of Dvergar (Sustenance)<br>
+	X XX 00 32 03 75 X4 30 00 02 00 96 00 C8 00 09 00 08 00 64<br>
+	<br>
+	Tablet of Dvergar (Renew Magic)<br>
+	X XX 00 32 03 75 X4 30 00 02 00 96 00 C8 00 0A 00 09 00 01<br>
+	<br>
+	Tablet of Dvergar (Renew Magic)<br>
+	X XX 00 32 03 75 X4 30 00 02 00 96 00 C8 00 0A 00 09 00 64<br>
+	<br>
+	Tablet of Dvergar (Ring of Intelligence)<br>
+	X XX 00 32 03 75 X4 30 00 02 00 96 00 C8 00 0B 00 0A 00 01<br>
+	<br>
+	Tablet of Oakraven (Constitution +1)<br>
+	X XX 00 EA 05 62 X8 30 00 03 00 96 00 C8 00 05 00 03 00 01<br>
+	<br>
+	Tablet of Oakraven (Dexterity +1)<br>
+	X XX 00 EA 05 62 X8 30 00 03 00 96 00 C8 00 03 00 04 00 01<br>
+	<br>
+	Tablet of Oakraven (Gain Level)<br>
+	X XX 00 EA 05 62 X8 30 00 03 00 96 00 C8 00 06 00 05 00 01<br>
+	<br>
+	Tablet of Oakraven (HP +10)<br>
+	X XX 00 EA 05 62 X8 30 00 03 00 96 00 C8 00 07 00 06 00 0A<br>
+	<br>
+	Tablet of Oakraven (Healing)<br>
+	X XX 00 EA 05 62 X8 30 00 03 00 96 00 C8 00 08 00 07 00 C8<br>
+	<br>
+	Tablet of Oakraven (Sustenance)<br>
+	X XX 00 EA 05 62 X8 30 00 03 00 96 00 C8 00 09 00 08 00 64<br>
+	<br>
+	Tablet of Oakraven (Renew Magic)<br>
+	X XX 00 EA 05 62 X8 30 00 03 00 96 00 C8 00 0A 00 09 00 64<br>
+	<br>
+	Tablet of Oakraven (Druid Bow +3)<br>
+	X XX 00 EA 05 62 X8 30 00 03 00 96 00 C8 00 0B 00 0C 00 01<br>
+	<br>
+	Tablet of Kaolic (Wisdom +1)<br>
+	X XX 00 2D 08 20 X2 30 00 01 00 96 00 C8 00 04 00 01 00 01<br>
+	<br>
+	Tablet of Kaolic (Constitution +1)<br>
+	X XX 00 2D 08 20 X2 30 00 01 00 96 00 C8 00 05 00 03 00 01<br>
+	<br>
+	Tablet of Kaolic (Level Gain)<br>
+	X XX 00 2D 08 20 X2 30 00 01 00 96 00 C8 00 06 00 05 00 01<br>
+	<br>
+	Tablet of Kaolic (HP +10)<br>
+	X XX 00 2D 08 20 X2 30 00 01 00 96 00 C8 00 07 00 06 00 0A<br>
+	<br>
+	Tablet of Kaolic (Healing)<br>
+	X XX 00 2D 08 20 X2 30 00 01 00 96 00 C8 00 08 00 07 00 C8<br>
+	<br>
+	Tablet of Kaolic (Sustenance)<br>
+	X XX 00 2D 08 20 X2 30 00 01 00 96 00 C8 00 09 00 08 00 64<br>
+	<br>
+	Tablet of Kaolic (Renew Magic)<br>
+	X XX 00 2D 08 20 X2 30 00 01 00 96 00 C8 00 0A 00 09 00 64<br>
+	<br>
+	Tablet of Kaolic (Ring of Protection +3)<br>
+	X XX 00 2D 08 20 X2 30 00 01 00 96 00 C8 00 0B 00 0B 00 01<br>
+	<br>
+	############################<br>
+	*****SPELLBOOK*****<br>
+	############################<br>
+	<br>
+	Prayers of Orlin (Cleric II)<br>
+	X XX 00 09 02 70 X2 0C 00 00 aa aa bb bb 00 cc 00 dd 00 00<br>
+	aaaa - weight / 16 bits<br>
+	bbbb - size / 16 bits<br>
+	cc - spell set (pages) / 8 bit<br>
+	dd - spell set (person); 01 - Cleric, 02 - Magic User, 03 - Druid / 8 bits<br>
+	<br>
+	Prayers of Orlin (Cleric II)<br>
+	X XX 00 09 02 70 X2 0C 00 00 00 96 00 64 00 03 00 01 00 00<br>
+	<br>
+	Tome of Life (Cleric III)<br>
+	X XX 00 09 08 13 X2 0C 00 00 00 96 00 64 00 02 00 01 00 00<br>
+	<br>
+	Book of Retribution (Cleric IV)<br>
+	X XX 00 09 07 76 X2 0C 00 00 00 96 00 64 00 04 00 01 00 00<br>
+	<br>
+	Manual of Piety (Cleric V)<br>
+	X XX 00 09 07 30 X2 0C 00 00 00 96 00 64 00 05 00 01 00 00<br>
+	<br>
+	Necromancer's Guide (Magic User II)<br>
+	X XX 00 0B 00 5E X0 0C 00 00 00 96 00 64 00 04 00 02 00 00<br>
+	<br>
+	Cult of Magic (Magic User III)<br>
+	X XX 00 0B 03 14 X4 0C 00 00 00 96 00 64 00 05 00 02 00 00<br>
+	<br>
+	Wizard Word (Magic User IV)<br>
+	X XX 00 0B 03 8F X4 0C 00 00 00 96 00 64 00 02 00 02 00 00<br>
+	<br>
+	Labrim of Darkmagic (Magic User V)<br>
+	X XX 00 0B 07 40 X4 0C 00 00 00 96 00 64 00 03 00 02 00 00<br>
+	<br>
+	Manual of the Planes (Druid II)<br>
+	X XX 00 0A 05 AF X0 0C 00 00 00 96 00 64 00 03 00 03 00 00<br>
+	<br>
+	Force of the Elements (Druid III)<br>
+	X XX 00 0A 04 F9 X0 0C 00 00 00 96 00 64 00 05 00 03 00 00<br>
+	<br>
+	Wisdom of the Druids (Druid IV)<br>
+	X XX 00 0A 06 16 X0 0C 00 00 00 96 00 64 00 02 00 03 00 00<br>
+	<br>
+	Book of Fire (Druid V)<br>
+	X XX 00 0A 06 CB X0 0C 00 00 00 96 00 64 00 04 00 03 00 00<br>
+	<br>
+	############################<br>
+	*****SPECIAL PANEL ITEM*****<br>
+	############################<br>
+	<br>
+	Eyes of True Sight<br>
+	X XX 00 AD 02 EE XF 2B 00 00 aa aa bb bb 00 cc 00 dd 00 00<br>
+	aaaa - weight / 16 bits<br>
+	bbbb - size / 16 bits<br>
+	cc - panel number; must be that same as panel to fit in / 8 bit<br>
+	dd - item number / 8 bits<br>
+	<br>
+	Eyes of True Sight<br>
+	X XX 00 AD 02 EE XF 2B 00 00 00 1E 00 14 00 02 00 01 00 00<br>
+	<br>
+	Moon Key<br>
+	X XX 00 AE 05 37 XF 2B 00 00 00 14 00 14 00 03 00 01 00 00<br>
+	<br>
+	Sun Key<br>
+	X XX 00 AF 06 41 XF 2B 00 00 00 14 00 14 00 03 00 00 00 00<br>
+	<br>
+	Skull Crown<br>
+	X XX 00 E6 0A 10 XF 2B 00 00 00 C8 00 69 00 06 00 00 00 00<br>
+	X XX 00 E6 0A 10 XF 2B 00 00 00 C8 00 69 00 06 00 01 00 00<br>
+	X XX 00 E6 0A 10 XF 2B 00 00 00 C8 00 69 00 06 00 02 00 00<br>
+	<br>
+	Pearl<br>
+	X XX 00 20 0C 00 XF 2B 00 00 00 0F 00 0F 00 09 00 00 00 00<br>
+	<br>
+	############################<br>
+	*****DEATH GEM*****<br>
+	############################<br>
+	<br>
+	Death Gem<br>
+	X XX 00 0C 02 26 X0 26 00 00 aa aa bb bb 00 cc 00 00 00 00<br>
+	aaaa - weight / 16 bits<br>
+	bbbb - size / 16 bits<br>
+	cc - who can be ressurected; 00 - Fighter; 01 - Cleric, 02 - Magic User, 03 - Druid, FF - no one / 8 bit<br>
+	<br>
+	Death Gem<br>
+	X XX 00 0C 02 26 X0 26 00 00 00 64 00 32 00 FF 00 00 00 00<br>
+	<br>
+	############################<br>
+	*****OTHER*****<br>
+	############################<br>
+	<br>
+	Skull<br>
+	X XX 00 AC 05 5C XF 27 00 00 aa aa bb bb 00 00 00 00 00 00<br>
+	aaaa - weight / 16 bits<br>
+	bbbb - size / 16 bits<br>
+	<br>
+	Skull<br>
+	X XX 00 AC 05 5C XF 27 00 00 00 00 00 00 00 00 00 00 00 00<br>
+	<br>
+	Idol of Temin<br>
+	X XX 00 AB 07 04 XF 2C 00 00 01 2C 27 10 00 00 00 00 00 00<br>
+	<br>
+	Orb of Planes<br>
+	X XX 00 E7 08 8B XF 27 00 00 00 64 00 4B 00 00 00 00 00 00<br>
+	<br>
+	Skull of Dvergar<br>
+	X XX 00 AC 0D 76 XF 27 00 00 00 C8 00 A0 00 00 00 00 00 00<br>
+	<br>
+	Skull of Runetek<br>
+	X XX 00 AC 0D 87 XF 27 00 00 00 C8 00 A0 00 00 00 00 00 00<br>
+	<br>
+	Skull of Oakraven<br>
+	X XX 00 AC 0D 98 XF 27 00 00 00 C8 00 A0 00 00 00 00 00 00<br>
+	<br>
+	Skull of Kaolic<br>
+	X XX 00 AC 0D AA XF 27 00 00 00 C8 00 A0 00 00 00 00 00 00<br>
+	<br>
+	</code>
+	<a href="bcdfs.html">back</a>
+	<br>
+	<br>
+	<br>
+	<br>
+	<br>
+  </body> 
+</html>

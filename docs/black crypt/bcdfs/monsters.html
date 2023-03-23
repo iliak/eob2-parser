@@ -1,0 +1,179 @@
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Black Crypt monsters</title>
+  </head>
+  <body>
+    Black Crypt monsters.<br>
+	<br>
+	This list is created from monsters placed on dungeon.<br>
+	Any monster is around 40 bytes inserted every time to dungeon file, so can be partialy custom as well.<br>
+	<br>
+	Monsters are stored in 13 files, loaded when map change. Its imposible to use any monster on any map, must be that same as original game.<br>
+	<br>
+	X is for unique number and it's not item data itself, but must be set.<br>
+	<br>
+	This section is less precise than items or may have errors because monster move, attack and some values affect other values.<br>
+	Bytecode explained:<br>
+	<br>
+	<code>
+	a aa 80 bb cc de F0 fg 0h ii jj jj 0k kk ll ll 00 0m 00 00 0n nn 00 00 00 00 00 01 oo oo pp pp 00 0q 00 04 FF 00 00 00<br>
+	aaa - number of anything placed on curent map (not level) / 12 bits<br>
+	bb - used gfx and sfx / 8 bits<br>
+	cc - chance to hit by player + random XP gain 0-value; 00 - almost always, FF - almost never / 8 bits<br>
+	d - moves through the door frame; 1, 3, 5, 7, 9, B, D, F - yes, 0, 2, 4, 8, A, C, E - no / 4 bits<br>
+	e - attack speed; 0 - slowest, F - fastest / 4 bits<br>
+	f - move speed; 0 - fastest, F - slowest, always 8 in game (affect attack speed, faster move speed, faster attack) / 4 bits<br>
+	g - move speed; 0 - fastest, F - slowest, base speed modifier (affect attack speed, faster move speed, faster attack) / 4 bits<br>
+	h - attack method; 0, 8 - no attack, 2, A melee only, 4, 6, C, E uses magic inc. poison, disease, +1 to value, monster can open door / 4 bits<br>
+	ii - magic attack intensity; 00 - only melee, poison and disease, looks like both digits do that same? / 8 bits<br>
+	jjjj - HP; max 80 04, higher values set HP to 1 and disables attack animation / 16 bits<br>
+	kkk - number for carring item; 0 00 if nothing / 12 bits<br>
+	llll - spell set bit flag; +8 00 - party held, +10 00 - possesion, +20 00 flesh to stone, +40 00 - disease, +80 00 - poison, rest mix cold and fire attacks and strength / 16 bits<br>
+	m - movement type; 0, 4, 6-A - normal, 1 - not move, 2 - teleport, 3 - disappearing thief, 5 - Possessor, B - "thank you", C-F - crash game / 4 bits<br>
+	nnn - number for proper stacking; 0 00 if no stacking (nothing placed after this monster on square, explained on main page - 7. Placing things / 12 bits<br>
+	oooo - XP gain; maximum gain from this and random values must fit in 16 bit value / 16 bits<br>
+	pppp - attack strength + random XP gain 0-value; / 16 bits<br>
+	q - position on square; 0 - NW, 1 - NE, 2 - SE, 3 - SW, 4 - center / 4 bits<br>
+	</code>
+	<br>
+	Monster list assigned to maps. Example one and assigned magic attack variants used in original dungeon.<br>
+	<br>
+	<code>
+	*****Map 1*****<br>
+	<br>
+	Rock Eye<br>
+	X XX 80 B3 02 75 F0 84 0A 00 00 19 00 00 00 00 00 06 00 00 00 00 00 00 00 00 00 01 00 28 00 19 00 04 00 04 FF 00 00 00<br>
+	<br>
+	Rock Eye (magic)<br>
+	X XX 80 B3 05 75 F0 86 06 02 00 23 00 00 00 84 00 00 00 00 00 00 00 00 00 00 00 01 00 3C 00 23 00 04 00 04 FF 00 00 00<br>
+	h - 6, C, E; ii - 01-04; llll - 00 04, 00 84, 00 86<br>
+	<br>
+	Two Head<br>
+	X XX 80 B2 09 3A F0 85 0B 00 00 8C 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 01 00 C8 00 8C 00 04 00 04 FF 00 00 00<br>
+	<br>
+	*****Map 2*****<br>
+	<br>
+	Maggot<br>
+	X XX 80 B1 0C 2F F0 82 0A 00 00 5F 00 00 00 00 00 06 00 00 00 00 00 00 00 00 00 01 00 3C 00 5F 00 04 00 04 FF 00 00 00<br>
+	<br>
+	Green Guy<br>
+	X XX 80 B0 05 84 F0 83 0E 01 00 41 00 00 80 00 00 00 00 00 00 00 00 00 00 00 00 01 00 46 00 41 00 04 00 04 FF 00 00 00<br>
+	h - 2, 6, A, E; ii - 00-01; llll - 00 00, 80 00<br>
+	<br>
+	Magnito<br>
+	X XX 80 4F 08 3C F0 83 03 00 00 37 00 00 00 00 00 03 00 00 00 00 00 00 00 00 00 01 00 5A 00 37 00 04 00 04 FF 00 00 00<br>
+	h - 3, A; m - 0, 3<br>
+	<br>
+	*****Map 3*****<br>
+	<br>
+	Ironhead<br>
+	X XX 80 4E 08 78 F0 83 0A 00 00 2D 00 00 00 00 00 09 00 00 00 00 00 00 00 00 00 01 00 5A 00 2D 00 04 00 04 FF 00 00 00<br>
+	<br>
+	Ironhead (magic)<br>
+	X XX 80 4E 0C 78 F0 83 0E 02 00 2D 00 00 00 84 00 00 00 00 00 00 00 00 00 00 00 01 00 5A 00 2D 00 04 00 04 FF 00 00 00<br>
+	h - 0, E; ii - 02, 05, 07; llll - 00 0C, 00 84, 00 88<br>
+	<br>
+	Slime<br>
+	X XX 80 C7 05 1E F0 83 02 00 00 25 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 01 00 96 00 25 00 04 00 04 FF 00 00 00<br>
+	h - 2, A<br>
+	<br>
+	Slime (magic)<br>
+	X XX 80 C7 08 1E F0 83 06 00 00 25 00 00 40 00 00 00 00 00 00 00 00 00 00 00 00 01 00 96 00 25 00 04 00 04 FF 00 00 00<br>
+	<br>
+	Druid Watcher (magic)<br>
+	X XX 80 4D 0F AC F0 83 06 0A 00 82 00 00 C9 9B 00 00 00 00 00 00 00 00 00 00 00 01 00 FA 00 82 00 04 00 04 FF 00 00 00<br>
+	ii - 06, 0A, 19, 42; llll - 00 89, 09 13, 09 99, C9 9B<br>
+	<br>
+	*****Map 4*****<br>
+	<br>
+	Little Glop<br>
+	X XX 80 4C 06 24 F0 81 02 01 00 19 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 01 00 5A 00 19 00 04 00 04 FF 00 00 00<br>
+	ii - 00-01<br>
+	<br>
+	Little Glop (magic)<br>
+	X XX 80 4C 06 24 F0 81 06 00 00 23 00 00 80 00 00 00 00 00 00 00 00 00 00 00 00 01 00 5A 00 23 00 04 00 04 FF 00 00 00<br>
+	h - 2; ii - 01<br>
+	<br>
+	Big Glop (magic)<br>
+	X XX 80 4B 09 2E F0 83 06 03 00 41 00 00 41 02 00 00 00 00 00 00 00 00 00 00 00 01 00 96 00 41 00 04 00 04 FF 00 00 00<br>
+	h - 7; ii - 04; llll - 41 06, 41 07, 41 12<br>
+	<br>
+	Lich Dragon (magic)<br>
+	X XX 80 50 11 0F F0 83 0E 11 00 DC 00 00 C6 22 00 00 00 00 00 00 00 00 00 00 00 01 05 14 00 DC 00 04 00 04 FF 00 00 00<br>
+	<br>
+	*****Map 5*****<br>
+	<br>
+	Spider<br>
+	X XX 80 C3 08 24 F0 82 02 00 00 32 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 01 00 C8 00 32 00 01 00 04 FF 00 00 00<br>
+	<br>
+	Spider (magic)<br>
+	X XX 80 C3 0C 2F F0 82 06 FF 00 5A 00 00 40 01 00 06 00 00 00 00 00 00 00 00 00 01 01 F4 00 5A 00 04 00 04 FF 00 00 00<br>
+	h - 2; ii - 00; llll - C0 00<br>
+	<br>
+	Plant (magic)<br>
+	X XX 80 BA 0C 7C F0 84 0F 2C 00 3C 00 00 49 38 00 00 00 00 00 00 00 00 00 00 00 01 01 2C 00 3C 00 04 00 04 FF 00 00 00<br>
+	h - 7; ii - 01-03, 05; llll - 48 80, 48 A0, 48 B0, 49 88, 49 90, 4A 88<br>
+	<br>
+	*****Map 6*****<br>
+	<br>
+	Possessor<br>
+	X XX 80 B8 0F 3F F0 86 0F FF 00 96 00 00 13 18 00 05 00 00 00 00 00 00 00 00 00 01 4E 20 00 96 00 04 00 04 FF 00 00 00<br>
+	<br>
+	*****Map 7*****<br>
+	<br>
+	Ram Demon (magic)<br>
+	X XX 80 B5 0B 3F F0 83 0F 07 00 5A 00 00 01 8F 00 00 00 00 00 00 00 00 00 00 00 01 01 2C 00 5A 00 04 00 04 FF 00 00 00<br>
+	h - E; llll - 09 8F, CB 9F, CF 9F<br>
+	<br>
+	Cloaker<br>
+	X XX 80 B9 08 0F F0 83 0A 00 00 E1 00 00 00 00 00 01 00 00 00 00 00 00 00 00 00 01 00 FA 00 E1 00 04 00 04 FF 00 00 00<br>
+	<br>
+	*****Map 8*****<br>
+	<br>
+	Ram Lord (magic)<br>
+	X XX 80 B6 11 3F F0 84 0D 2D 02 26 00 00 CE 73 00 00 00 00 00 00 00 00 00 00 00 01 3A 98 02 26 00 04 00 04 FF 00 00 00<br>
+	<br>
+	*****Map 9*****<br>
+	<br>
+	Squid<br>
+	X XX 80 BF 0F 6D F0 82 02 00 00 32 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 01 01 90 00 32 00 04 00 04 FF 00 00 00<br>
+	<br>
+	Merman (magic)<br>
+	X XX 80 C4 0E 7D F0 83 0A 01 00 32 00 00 00 01 00 00 00 00 00 00 00 00 00 00 00 01 01 C2 00 32 00 04 00 04 FF 00 00 00<br>
+	h - 6, E, F; ii - 0C; llll - 00 03<br>
+	<br>
+	*****Map 10*****<br>
+	<br>
+	Water Lord (magic)<br>
+	X XX 80 BC 12 3F F0 83 0F 23 01 77 00 00 0F 03 00 00 00 00 00 00 00 00 00 00 00 01 3A 98 01 77 00 04 00 04 FF 00 00 00<br>
+	<br>
+	*****Map 11*****<br>
+	<br>
+	Spirit (magic)<br>
+	X XX 80 C6 0D 7A F0 83 0F 02 00 28 00 00 00 08 00 02 00 00 00 00 00 00 00 00 00 01 04 E2 00 28 00 04 00 04 FF 00 00 00<br>
+	h - D; ii - 06; llll - 41 09, 41 13, 43 33<br>
+	<br>
+	Medusa (magic)<br>
+	X XX 80 BE 10 6F F0 83 0C FF 00 96 00 00 22 02 00 00 00 00 00 00 00 00 00 00 00 01 3A 98 00 96 00 04 00 04 FF 00 00 00<br>
+	<br>
+	*****Map 12****<br>
+	<br>
+	Skeleton Lord (magic)<br>
+	X XX 80 B4 10 3F F0 82 0F FF 01 C2 00 00 CE 63 00 00 00 00 00 00 00 00 00 00 00 01 13 88 01 C2 00 04 00 04 FF 00 00 00<br>
+	ii - 0A<br>
+	<br>
+	*****Map 13*****<br>
+	<br>
+	Estoroth<br>
+	X XX 80 C5 0F 3F F0 82 0F FF 01 5E 00 00 CB 33 00 00 00 00 00 00 00 00 00 00 00 01 FD E8 01 5E 00 04 00 04 FF 00 00 00<br>
+	<br>
+	</code>
+	<a href="bcdfs.html">back</a>
+	<br>
+	<br>
+	<br>
+	<br>
+	<br>
+  </body> 
+</html>
