@@ -1,3 +1,4 @@
+import os.path
 import struct
 
 class BinaryReader:
@@ -48,6 +49,12 @@ class BinaryReader:
         :return:
         """
         return hex(self.offset)
+
+    def get_size(self):
+        """
+        Get the size of the file
+        """
+        return os.path.getsize(self.filename)
 
     def read_ubyte(self, count=1):
         """

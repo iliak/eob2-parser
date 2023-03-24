@@ -11,7 +11,7 @@ def dcr_decode():
 
     for file in files:
         dcr[file] = []
-        with BinaryReader('data/{file}'.format(file=file)) as reader:
+        with BinaryReader(f'data/{file}') as reader:
             count = reader.read_ushort()
             for i in range(count):
                 sides = []

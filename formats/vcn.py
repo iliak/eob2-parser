@@ -1,3 +1,4 @@
+import os
 import struct
 
 from decoders import format80_decode
@@ -8,27 +9,40 @@ def vcn_decode():
     files = ['CRIMSON.VCN', 'DUNG.VCN', 'FOREST.VCN', 'MEZZ.VCN', 'SILVER.VCN']
     vcn = {}
 
-    for file in files:
-        vcn[file] = {}
+    input_path = './data/'
+    output_path = './build/decoded/'
 
-        with BinaryReader('data/{file}'.format(file=file)) as reader:
-            data = format80_decode(reader)
+    if not os.path.exists(output_path):
+        os.makedirs(output_path)
 
-            with open("data/{file}.uncps".format(file=file), "wb") as handle:
-                s = struct.pack('{count}B'.format(count=len(data)), *data)
-                handle.write(s)
+    for filename in files:
+        vcn[filename] = {}
 
-            # continue
-        with BinaryReader('data/{file}.uncps'.format(file=file)) as reader:
 
-            vcn[file]['count'] = reader.read_ushort()
-            vcn[file]['palette_backdrop'] = reader.read_ubyte(16)
-            vcn[file]['palette_wall'] = reader.read_ubyte(16)
+        # Decode file
+        data = format80_decode(f'{input_path}/{filename}')
+
+        # Save uncompressed file
+        target = f"{output_path}{filename}.uncps"
+        with open(target, "wb") as handle:
+            s = struct.pack('{count}B'.format(count=len(data)), *data)
+            handle.write(s)
+
+        # Process file
+        with BinaryReader(target) as reader:
+
+            # Export content
+            vcn[filename]['count'] = reader.read_ushort()
+            vcn[filename]['palette_backdrop'] = reader.read_ubyte(16)
+            vcn[filename]['palette_wall'] = reader.read_ubyte(16)
             shapes = []
-            for i in range(vcn[file]['count']):
+            for i in range(vcn[filename]['count']):
                 raw = reader.read_byte(32)
                 shapes.append(raw)
-            vcn[file]['shapes'] = shapes
-            i = 1
+            vcn[filename]['shapes'] = shapes
+
+
+            # Draw the file
+
 
     return vcn

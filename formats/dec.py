@@ -5,7 +5,6 @@ def dec_decode():
     # .DEC
 
     files = ['AZURE.DEC', 'BROWN.DEC', 'CRIMSON.DEC', 'FOREST.DEC', 'MEZZ.DEC', 'SILVER.DEC']
-    # files = ['AZURE.DEC']
     decorations = {}
 
     for file in files:

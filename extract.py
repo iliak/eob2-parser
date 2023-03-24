@@ -14,6 +14,7 @@ from formats.pal import pal_decode
 from formats.text import text_decode
 from formats.vcn import vcn_decode
 from formats.vmp import vmp_decode, vmp_draw
+from formats.cps import cps_decode
 from savegame import Savegame
 
 assets = {
@@ -52,16 +53,22 @@ def dump():
 # http://www.shikadi.net/moddingwiki/Eye_of_the_Beholder
 if __name__ == '__main__':
     # PAL: color palettes
-    assets['pal'] = pal_decode()
+    # assets['pal'] = pal_decode()
 
     # DEC: decoration rectangle
-    assets['dec'] = dec_decode()
-
-    # VMP: information about how to put together the blocks defined in the corresponding vcn files, into proper walls
-    assets['vmp'] = vmp_decode()
+    # assets['dec'] = dec_decode()
 
     # VCN: graphics for the walls including the background
-    assets['vcn'] = vcn_decode()
+    # assets['vcn'] = vcn_decode()
+
+    # VMP: information about how to put together the blocks defined in the corresponding vcn files, into proper walls
+    # assets['vmp'] = vmp_decode()
+
+    # CPS:
+    assets['cps'] = cps_decode()
+
+    dump()
+    exit()
 
     # DCR: monster graphics
     assets['dcr'] = dcr_decode()
